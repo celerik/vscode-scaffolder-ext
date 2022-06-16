@@ -1,13 +1,13 @@
 {
   "name": "celerik-scaffolder",
-  "displayName": "Celerik scaffolder",
+  "displayName": "Celerik Scaffolder",
   "description": "Extension for VSCode that helps to automate code generation through scaffolding",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.68.0"
   },
   "categories": [
-    "Other"
+    "Snippets"
   ],
   "activationEvents": [
     "onCommand:celerik-scaffolder.open"
@@ -15,13 +15,13 @@
   "main": "./out/src/extension.js",
   "contributes": {
     "menus": {
-			"explorer/context": [
-			  {
-				"command": "celerik-scaffolder.open",
-				"when": "explorerResourceIsFolder"
-			  }
-			]
-		},
+      "explorer/context": [
+        {
+          "command": "celerik-scaffolder.open",
+          "when": "explorerResourceIsFolder"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "celerik-scaffolder.open",
@@ -30,16 +30,16 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
     "compile": "npm-run-all compile:*",
     "compile:extension": "tsc -p ./",
     "compile:view": "webpack --mode development",
+    "lint": "eslint src --ext ts",
+    "pretest": "npm run compile && npm run lint",
+    "test": "node ./out/test/runTest.js",
+    "vscode:prepublish": "npm run compile",
     "watch": "npm-run-all -p watch:*",
     "watch:extension": "tsc -watch -p ./",
-    "watch:view": "webpack --watch --mode development",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "watch:view": "webpack --watch --mode development"
   },
   "devDependencies": {
     "@types/glob": "7.2.0",
