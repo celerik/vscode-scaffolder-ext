@@ -10,39 +10,24 @@
     "Other"
   ],
   "activationEvents": [
-    "onStartupFinished"
+    "onCommand:celerik-scaffolder.open"
   ],
   "main": "./out/src/extension.js",
   "contributes": {
+    "menus": {
+			"explorer/context": [
+			  {
+				"command": "celerik-scaffolder.open",
+				"when": "explorerResourceIsFolder"
+			  }
+			]
+		},
     "commands": [
       {
-        "command": "webview.open",
-        "title": "Open Webview",
-        "category": "Webview React"
-      },
-      {
-        "command": "extension.sendMessage",
-        "title": "Send Message to Webview",
-        "category": "Webview React"
+        "command": "celerik-scaffolder.open",
+        "title": "Celerik Scaffolder"
       }
-    ],
-    "configuration": {
-      "title": "Webview React",
-      "properties": {
-        "webviewReact.userApiGender": {
-          "type": "string",
-          "default": "male",
-          "enum": [
-            "male",
-            "female"
-          ],
-          "enumDescriptions": [
-            "Fetching user information with gender of male",
-            "Fetching user information with gender of female"
-          ]
-        }
-      }
-    }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
