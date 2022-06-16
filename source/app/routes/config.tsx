@@ -1,41 +1,24 @@
+// packages
 import React from 'react';
-import { Home } from '../components/Home';
-import { About } from '../components/About';
-import { Message } from '../components/Message';
-import { ReceivedMessages } from '../components/ReceivedMessages';
-import { SendMessage } from '../components/SendMessage';
+import Dashboard from '../components/Dashboard';
+import Settings from '../components/Settings';
 
+// scripts
 export type RouteConfigComponentProps = Pick<RouteConfig, 'routes'>;
 
 export type RouteConfig = {
   path: string;
-  element: React.ComponentType<RouteConfigComponentProps>;
-  exact?: boolean;
+  element: JSX.Element;
   routes?: RouteConfig[];
 };
 
 export const routes: RouteConfig[] = [
   {
     path: '/',
-    element: Home,
-    exact: true
+    element: <Dashboard />
   },
   {
-    path: '/about',
-    element: About,
-  },
-  {
-    path: '/message',
-    element: Message,
-    routes: [
-      {
-        path: '/message/received',
-        element: ReceivedMessages,
-      },
-      {
-        path: '/message/send',
-        element: SendMessage,
-      },
-    ],
-  },
+    path: '/settings',
+    element: <Settings />,
+  }
 ];

@@ -13,7 +13,7 @@ export class ViewLoader {
     this.context = context;
     this.disposables = [];
 
-    this.panel = vscode.window.createWebviewPanel('reactApp', 'React App', vscode.ViewColumn.One, {
+    this.panel = vscode.window.createWebviewPanel('celerikScaffolder', 'Celerik Scaffolder', vscode.ViewColumn.One, {
       enableScripts: true,
       retainContextWhenHidden: true,
       localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app'))],
