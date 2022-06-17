@@ -3,11 +3,14 @@
     "module": "commonjs",
     "target": "es6",
     "outDir": "out",
+    "moduleResolution": "node",
+    "incremental": false,
     "lib": [
       "es6"
     ],
     "sourceMap": true,
     "rootDir": ".",
+    "jsx": "react-jsx",
     "strict": true
   },
   "exclude": [
