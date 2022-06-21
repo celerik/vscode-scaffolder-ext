@@ -1,5 +1,14 @@
 {
   // See http://go.microsoft.com/fwlink/?LinkId=827846
   // for the documentation about the extensions.json format
-  "recommendations": ["dbaeumer.vscode-eslint", "amodio.tsl-problem-matcher"]
+  "recommendations": [
+    "christian-kohler.npm-intellisense",
+    "dbaeumer.vscode-eslint",
+    "editorconfig.editorconfig",
+    "stylelint.vscode-stylelint",
+    "tyriar.sort-lines",
+    "mgmcdermott.vscode-language-babel",
+    "vscode-icons-team.vscode-icons",
+    "visioncan.vscode-jss-snippets"
+  ]
 }
