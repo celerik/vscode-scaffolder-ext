@@ -6,6 +6,9 @@
     "dbaeumer.vscode-eslint",
     "editorconfig.editorconfig",
     "stylelint.vscode-stylelint",
-    "tyriar.sort-lines"
+    "tyriar.sort-lines",
+    "mgmcdermott.vscode-language-babel",
+    "vscode-icons-team.vscode-icons",
+    "visioncan.vscode-jss-snippets"
   ]
 }

@@ -1,3 +1,3 @@
-import React from 'react';
+import { createContext } from 'react';
 
-export const MessagesContext = React.createContext<string[]>([]);
+export const MessagesContext = createContext<string[]>([]);
