@@ -1,7 +1,7 @@
 // packages
 import React from 'react';
-import Dashboard from '../components/Dashboard';
-import Settings from '../components/Settings';
+import Dashboard from '../components/pages/Dashboard';
+import Settings from '../components/pages/Settings';
 
 // scripts
 export type RouteConfigComponentProps = Pick<RouteConfig, 'routes'>;
