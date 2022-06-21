@@ -7,27 +7,33 @@ import {
 type IPalette = PaletteOptions;
 
 const colors = {
-  blue: '#708AEF',
-  drakBlue: '#263344',
-  lightBlue: '#394A61',
-  lightGray: '#B3B3B3',
+  charcoal: '#354459',
+  cornflowerBlue: '#708AEF',
+  gunmetal: '#263344',
+  japaneseIndigo: "#293648",
+  philippineSilver: '#B3B3B3',
+  policeBlue: '#394A61',
   white: '#FFFFFF'
 };
 
 const theme = createTheme({
   palette: {
     background: {
-      default: colors.drakBlue,
-      paper: colors.lightBlue,
+      default: colors.gunmetal,
+      paper: colors.policeBlue,
     },
     grey: {
-      600: colors.lightGray
+      500: colors.philippineSilver
     },
     primary: {
       main: colors.white
     },
+    secondary: {
+      main: colors.japaneseIndigo
+    },
     text: {
-      main: colors.blue
+      primary: colors.cornflowerBlue,
+      secondary: colors.philippineSilver
     }
   } as IPalette,
   typography: {
@@ -55,6 +61,28 @@ const theme = createTheme({
     },
     caption: {
       fontSize: 10
+    }
+  },
+  components: {
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          backgroundColor: colors.charcoal,
+          color: 'white'
+        }
+      }
+    },
+    MuiButton: {
+      styleOverrides: {
+        contained: {
+          padding: "10px 20px",
+          height: "min-content",
+          color: colors.cornflowerBlue,
+          bgColor: 'white',
+          textTransform: 'capitalize',
+          fontWeight: '500'
+        }
+      }
     }
   }
 });
