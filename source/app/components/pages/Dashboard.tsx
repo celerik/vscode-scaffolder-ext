@@ -10,7 +10,7 @@ import SettingsButton from '../molecules/SettingsButton';
 // styles
 const styles = {
   gridContainer: {
-    bgcolor: '#263344',
+    bgcolor: 'background.default',
     height: '100vh',
     padding: '10px 20px'
   },

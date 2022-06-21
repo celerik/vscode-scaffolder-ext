@@ -1,4 +1,5 @@
-import * as React from 'react';
+// packages
+import React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -7,82 +8,78 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import { Theme } from '@mui/material';
 
-export interface DialogTitleProps {
-  id: string;
-  children?: React.ReactNode;
-  onClose: () => void;
+const styles = {
+  content: { display: 'flex', flexDirection: 'column' },
+  saveButton: {
+    mt: 2,
+    width: '25%',
+    alignSelf: 'end'
+  },
+  titleContainer: { m: 0, pl: 2 },
+  title: { color: "white", m: 0, fontWeight: 500 },
+  iconButton: {
+    position: 'absolute',
+    right: 3,
+    top: 1,
+    color: (theme: Theme) => theme.palette.grey[500],
+  },
+  input: {
+    "& .MuiOutlinedInput-root.Mui-focused": {
+      "& > fieldset": {
+        borderColor: "secondary.main"
+      }
+    },
+    "& .MuiOutlinedInput-root:hover": {
+      "& > fieldset": {
+        borderColor: "secondary.main"
+      }
+    }
+  }
+};
+
+export interface Props {
+  handleModalValue: (state: boolean) => void;
+  modalState: boolean;
 }
 
-const BootstrapDialogTitle = (props: DialogTitleProps) => {
-  const { children, onClose, ...other } = props;
+export default function CustomizedDialogs({
+  handleModalValue,
+  modalState
+}: Props) {
+  const handleClose = () => {
+    handleModalValue(false);
+  };
 
   return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
+    <Dialog
+      open={modalState}
+      disableEscapeKeyDown
+      fullWidth
+      sx={{ borderRadius: 0 }}
+      maxWidth="sm"
+    >
+      <DialogTitle sx={styles.titleContainer} component="div">
+        <Typography gutterBottom variant='h5' sx={styles.title}>
+          Settings
+        </Typography>
         <IconButton
           aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
+          onClick={handleClose}
+          sx={styles.iconButton}
         >
           <CloseIcon />
         </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-};
-
-export default function CustomizedDialogs() {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open dialog
-      </Button>
-      <Dialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        open={open}
-      >
-        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-          Modal title
-        </BootstrapDialogTitle>
-        <DialogContent dividers>
-          <Typography gutterBottom>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-            consectetur ac, vestibulum at eros.
-          </Typography>
-          <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-            Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-          </Typography>
-          <Typography gutterBottom>
-            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-            magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-            ullamcorper nulla non metus auctor fringilla.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            Save changes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+      </DialogTitle>
+      <DialogContent dividers sx={styles.content}>
+        <Typography gutterBottom sx={{ color: "text.secondary" }} variant="body1">
+          Templates URL (GitHub):
+        </Typography>
+        <TextField id="outlined-basic" sx={styles.input} size="small" variant="outlined" />
+        <Button variant="contained" onClick={handleClose} sx={styles.saveButton}>Save</Button>
+      </DialogContent>
+    </Dialog>
   );
 }
