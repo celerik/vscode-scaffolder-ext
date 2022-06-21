@@ -1,11 +1,35 @@
 // @packages
 import {
-  createTheme
+  createTheme,
+  PaletteOptions
 } from '@mui/material/styles';
 
+type IPalette = PaletteOptions;
 
+const colors = {
+  blue: '#708AEF',
+  drakBlue: '#263344',
+  lightBlue: '#394A61',
+  lightGray: '#B3B3B3',
+  white: '#FFFFFF'
+};
 
 const theme = createTheme({
+  palette: {
+    background: {
+      default: colors.drakBlue,
+      paper: colors.lightBlue,
+    },
+    grey: {
+      600: colors.lightGray
+    },
+    primary: {
+      main: colors.white
+    },
+    text: {
+      main: colors.blue
+    }
+  } as IPalette,
   typography: {
     h1: {
       fontSize: 34,

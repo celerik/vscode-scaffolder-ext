@@ -4,6 +4,9 @@ import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
+// scripts
+import SettingsButton from '../molecules/SettingsButton';
+
 // styles
 const styles = {
   gridContainer: {
@@ -23,9 +26,12 @@ const styles = {
 const Dashboard = () => {
   return (
     <Grid direction='column' container sx={styles.gridContainer}>
-      <Typography variant='h2' sx={styles.textContainer}>Celerik Scaffolder</Typography>
+      <Grid direction="row" justifyContent="space-between" alignItems="center" container item>
+        <Typography variant='h2' sx={styles.textContainer}>Settings</Typography>
+        <SettingsButton />
+      </Grid>
       <Divider sx={styles.divider} />
-    </Grid>
+    </Grid >
   );
 };
 
