@@ -7,3 +7,5 @@ type VSCode = {
 };
 
 declare const vscode: VSCode;
+
+declare const prevState: string;

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { Message, CommonMessage } from './messages/messageTypes';
+import { Message, CommonMessage, StateMessage } from './messages/messageTypes';
 
 export class ViewLoader {
   public static currentPanel?: vscode.WebviewPanel;
@@ -18,6 +18,12 @@ export class ViewLoader {
       retainContextWhenHidden: true,
       localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app'))],
     });
+    const templateUrl = 'template.url';
+    const state = context.globalState.get(templateUrl);
+    if (!state) {
+      context.globalState.setKeysForSync([templateUrl]);
+    }
+
 
     // render webview
     this.renderWebview();
@@ -27,6 +33,9 @@ export class ViewLoader {
       (message: Message) => {
         if (message.type === 'RELOAD') {
           vscode.commands.executeCommand('workbench.action.webview.reloadWebviewAction');
+        } else if (message.type === 'STATE') {
+          const text = (message as StateMessage).payload;
+          context.globalState.update(templateUrl, text);
         } else if (message.type === 'COMMON') {
           const text = (message as CommonMessage).payload;
           vscode.window.showInformationMessage(`Received message from Webview: ${text}`);
@@ -100,6 +109,7 @@ export class ViewLoader {
           <div id="root"></div>
           <script>
             const vscode = acquireVsCodeApi();
+            const prevState = "${this.context.globalState.get('template.url')}";
           </script>
           <script src="${bundleScriptPath}"></script>
         </body>

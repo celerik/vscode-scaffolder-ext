@@ -10,6 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { Theme } from '@mui/material';
+import { StateMessage } from '../../../src/view/messages/messageTypes';
 
 const styles = {
   content: { display: 'flex', flexDirection: 'column' },
@@ -49,6 +50,14 @@ export default function CustomizedDialogs({
   handleModalValue,
   modalState
 }: Props) {
+  const onUpdateUrl = () => {
+    vscode.postMessage<StateMessage>({
+      type: 'STATE',
+      payload: "Nuevo",
+    });
+    handleModalValue(false);
+  };
+
   const handleClose = () => {
     handleModalValue(false);
   };
@@ -77,8 +86,8 @@ export default function CustomizedDialogs({
         <Typography gutterBottom sx={{ color: "text.secondary" }} variant="body1">
           Templates URL (GitHub):
         </Typography>
-        <TextField id="outlined-basic" sx={styles.input} size="small" variant="outlined" />
-        <Button variant="contained" onClick={handleClose} sx={styles.saveButton}>Save</Button>
+        <TextField id="outlined-basic" sx={styles.input} value={prevState} size="small" variant="outlined" />
+        <Button variant="contained" onClick={onUpdateUrl} sx={styles.saveButton}>Save</Button>
       </DialogContent>
     </Dialog>
   );
