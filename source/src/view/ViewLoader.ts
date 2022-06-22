@@ -18,10 +18,11 @@ export class ViewLoader {
       retainContextWhenHidden: true,
       localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app'))],
     });
-    const templateUrl = 'template.url';
+    const templateUrl = 'global.state';
     const state = context.globalState.get(templateUrl);
     if (!state) {
-      context.globalState.setKeysForSync([templateUrl]);
+      const data = JSON.stringify({ templateUrl: "https://github.com/celerik/celerik-scaffolder-templates.git" });
+      context.globalState.update(templateUrl, data);
     }
 
 
@@ -35,7 +36,7 @@ export class ViewLoader {
           vscode.commands.executeCommand('workbench.action.webview.reloadWebviewAction');
         } else if (message.type === 'STATE') {
           const text = (message as StateMessage).payload;
-          context.globalState.update(templateUrl, text);
+          context.globalState.update(templateUrl, JSON.stringify(text));
         } else if (message.type === 'COMMON') {
           const text = (message as CommonMessage).payload;
           vscode.window.showInformationMessage(`Received message from Webview: ${text}`);
@@ -96,6 +97,9 @@ export class ViewLoader {
       vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app', 'bundle.js'))
     );
 
+    let prevState = this.context.globalState.get('global.state') || '';
+    prevState = JSON.stringify(prevState).replace(/\\"/g, '\'');
+
     return `
       <!DOCTYPE html>
         <html lang="en">
@@ -109,7 +113,7 @@ export class ViewLoader {
           <div id="root"></div>
           <script>
             const vscode = acquireVsCodeApi();
-            const prevState = "${this.context.globalState.get('template.url')}";
+            const prevState = ${prevState};
           </script>
           <script src="${bundleScriptPath}"></script>
         </body>

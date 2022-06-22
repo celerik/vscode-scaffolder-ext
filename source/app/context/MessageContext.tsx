@@ -1,3 +1,3 @@
-import { createContext } from 'react';
+import React, { createContext } from 'react';
 
-export const MessagesContext = createContext<string[]>([]);
+export const GlobalStateContext = createContext<any>([]);

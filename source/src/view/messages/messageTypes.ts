@@ -12,7 +12,7 @@ export interface CommonMessage extends Message {
 
 export interface StateMessage extends Message {
   type: 'STATE';
-  payload: string;
+  payload: Object;
 }
 
 export interface ReloadMessage extends Message {

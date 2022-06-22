@@ -9,35 +9,54 @@ import {
 } from 'react-router-dom';
 
 // scripts
-import { MessagesContext } from './context/MessageContext';
-import { CommonMessage, Message, ReloadMessage } from '../src/view/messages/messageTypes';
+import { GlobalStateContext } from './context/MessageContext';
+import { CommonMessage, Message, ReloadMessage, StateMessage } from '../src/view/messages/messageTypes';
 
 export const App = () => {
-  const [messagesFromExtension, setMessagesFromExtension] = useState<string[]>([]);
+  const [globalStateFromExtension, setGlobalStateFromExtension] = useState<Record<string, any>>({});
 
-  const handleMessagesFromExtension = useCallback(
+  const handleStateFromExtension = useCallback(
     (event: MessageEvent<Message>) => {
       if (event.data.type === 'COMMON') {
         const message = event.data as CommonMessage;
-        setMessagesFromExtension([...messagesFromExtension, message.payload]);
+        setGlobalStateFromExtension({ ...globalStateFromExtension, message: message.payload });
       }
     },
-    [messagesFromExtension]
+    [globalStateFromExtension]
   );
+
+  const handleStateFromApp = (property: string, value: string) => {
+    const data = { ...globalStateFromExtension, [property]: value };
+    vscode.postMessage<StateMessage>({
+      type: 'STATE',
+      payload: { ...data },
+    });
+    setGlobalStateFromExtension({ ...data });
+
+  };
+
+  useEffect(() => {
+    debugger
+    if (prevState) {
+      const mapped = `${prevState.replace(/'/g, '"')}`;
+      setGlobalStateFromExtension(JSON.parse(mapped));
+      return;
+    }
+  }, []);
 
   useEffect(() => {
     window.addEventListener('message', (event: MessageEvent<Message>) => {
-      handleMessagesFromExtension(event);
+      handleStateFromExtension(event);
     });
 
     return () => {
-      window.removeEventListener('message', handleMessagesFromExtension);
+      window.removeEventListener('message', handleStateFromExtension);
     };
-  }, [handleMessagesFromExtension]);
+  }, [handleStateFromExtension]);
 
   return (
     <BrowserRouter>
-      <MessagesContext.Provider value={messagesFromExtension}>
+      <GlobalStateContext.Provider value={{ globalStateFromExtension, handleStateFromApp }}>
         <Routes>
           <Route path='*' element={<Navigate to='/' />} />
           <Route path='/'>
@@ -50,7 +69,7 @@ export const App = () => {
             ))}
           </Route>
         </Routes>
-      </MessagesContext.Provider>
+      </GlobalStateContext.Provider>
     </BrowserRouter>
   );
 };
