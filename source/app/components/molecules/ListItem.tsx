@@ -14,7 +14,6 @@ const styles = {
   },
   buttonSelect: {
     mt: '3px',
-    color: '#3a78d1',
   },
 };
 export interface Props {
@@ -35,7 +34,9 @@ const _ListItem = function ({ nameFolder, link }: Props) {
             </Link>
           </Grid>
           <Grid xs={2} md={1} item>
-            <Button sx={styles.buttonSelect}>select</Button>
+            <Button variant="text" sx={styles.buttonSelect}>
+              select
+            </Button>
           </Grid>
         </Grid>
       </ListItem>

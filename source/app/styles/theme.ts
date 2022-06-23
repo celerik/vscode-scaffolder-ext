@@ -12,6 +12,7 @@ const colors = {
   policeBlue: '#394A61',
   white: '#FFFFFF',
   lavanderGrey: '#BEC2D1',
+  hanBlue: '#3A78D1',
 };
 
 const theme = createTheme({
@@ -80,6 +81,9 @@ const theme = createTheme({
           bgColor: 'white',
           textTransform: 'capitalize',
           fontWeight: '500',
+        },
+        text: {
+          color: colors.hanBlue,
         },
       },
     },
