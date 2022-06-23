@@ -13,11 +13,16 @@ export class ViewLoader {
     this.context = context;
     this.disposables = [];
 
-    this.panel = vscode.window.createWebviewPanel('celerikScaffolder', 'Celerik Scaffolder', vscode.ViewColumn.One, {
-      enableScripts: true,
-      retainContextWhenHidden: true,
-      localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app'))],
-    });
+    this.panel = vscode.window.createWebviewPanel(
+      'celerikScaffolder',
+      'Celerik Scaffolder',
+      vscode.ViewColumn.One,
+      {
+        enableScripts: true,
+        retainContextWhenHidden: true,
+        localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app'))],
+      }
+    );
 
     // render webview
     this.renderWebview();
@@ -29,7 +34,10 @@ export class ViewLoader {
           vscode.commands.executeCommand('workbench.action.webview.reloadWebviewAction');
         } else if (message.type === 'COMMON') {
           const text = (message as CommonMessage).payload;
-          vscode.window.showInformationMessage(`Received message from Webview: ${text}`);
+          vscode.window.showInformationMessage(`${text}`);
+        } else if (message.type === 'ERROR') {
+          const text = (message as CommonMessage).payload;
+          vscode.window.showErrorMessage(`${text}`);
         }
       },
       null,
