@@ -1,16 +1,25 @@
+/* eslint-disable react/no-array-index-key */
+/* global vscode, prevState, window */
 // packages
-import React, { useEffect, useState, useCallback } from 'react';
-import { routes } from './routes/config';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useCallback
+} from 'react';
 import {
   Navigate,
   Route,
   Routes,
   BrowserRouter
 } from 'react-router-dom';
+import { routes } from './routes/config';
 
 // scripts
 import { GlobalStateContext } from './context/MessageContext';
-import { CommonMessage, Message, ReloadMessage, StateMessage } from '../src/view/messages/messageTypes';
+import {
+  CommonMessage, Message, StateMessage
+} from '../src/view/messages/messageTypes';
 
 export const App = () => {
   const [globalStateFromExtension, setGlobalStateFromExtension] = useState<Record<string, any>>({});
@@ -29,17 +38,15 @@ export const App = () => {
     const data = { ...globalStateFromExtension, [property]: value };
     vscode.postMessage<StateMessage>({
       type: 'STATE',
-      payload: { ...data },
+      payload: { ...data }
     });
     setGlobalStateFromExtension({ ...data });
-
   };
 
   useEffect(() => {
     if (prevState) {
       const mapped = `${prevState.replace(/'/g, '"')}`;
       setGlobalStateFromExtension(JSON.parse(mapped));
-      return;
     }
   }, []);
 
@@ -53,16 +60,26 @@ export const App = () => {
     };
   }, [handleStateFromExtension]);
 
+  const data = useMemo(
+    () => ({ globalStateFromExtension, handleStateFromApp }),
+    [globalStateFromExtension]
+  );
+
   return (
     <BrowserRouter>
-      <GlobalStateContext.Provider value={{ globalStateFromExtension, handleStateFromApp }}>
+      <GlobalStateContext.Provider value={data}>
         <Routes>
-          <Route path='*' element={<Navigate to='/' />} />
-          <Route path='/'>
+          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/">
             {routes.map((route, index) => (
               <Route key={index} index={!index} path={route.path} element={route.element}>
                 {!!route.routes && route.routes.map((subRoute, subIndex) => (
-                  <Route key={subIndex} index={!subIndex} path={subRoute.path} element={subRoute.element} />
+                  <Route
+                    key={subIndex}
+                    index={!subIndex}
+                    path={subRoute.path}
+                    element={subRoute.element}
+                  />
                 ))}
               </Route>
             ))}
