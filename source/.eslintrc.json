@@ -5,6 +5,7 @@
     "ecmaVersion": 6,
     "sourceType": "module"
   },
+  "extends": "airbnb",
   "plugins": [
     "@typescript-eslint",
     "react-hooks"
