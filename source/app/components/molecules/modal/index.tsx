@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 // packages
 import React, { useContext, useEffect } from 'react';
 import Button from '@mui/material/Button';
