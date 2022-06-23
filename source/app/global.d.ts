@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 type Message = import('../src/view/messages/messageTypes').Message;
 
 type VSCode = {
@@ -7,3 +8,5 @@ type VSCode = {
 };
 
 declare const vscode: VSCode;
+
+declare const prevState: string;

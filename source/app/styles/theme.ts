@@ -1,11 +1,41 @@
 // @packages
 import {
-  createTheme
+  createTheme,
+  PaletteOptions
 } from '@mui/material/styles';
 
+type IPalette = PaletteOptions;
 
+const colors = {
+  charcoal: '#354459',
+  cornflowerBlue: '#708AEF',
+  gunmetal: '#263344',
+  japaneseIndigo: '#293648',
+  philippineSilver: '#B3B3B3',
+  policeBlue: '#394A61',
+  white: '#FFFFFF'
+};
 
 const theme = createTheme({
+  palette: {
+    background: {
+      default: colors.gunmetal,
+      paper: colors.policeBlue
+    },
+    grey: {
+      500: colors.philippineSilver
+    },
+    primary: {
+      main: colors.white
+    },
+    secondary: {
+      main: colors.japaneseIndigo
+    },
+    text: {
+      primary: colors.cornflowerBlue,
+      secondary: colors.philippineSilver
+    }
+  } as IPalette,
   typography: {
     h1: {
       fontSize: 34,
@@ -31,6 +61,28 @@ const theme = createTheme({
     },
     caption: {
       fontSize: 10
+    }
+  },
+  components: {
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          backgroundColor: colors.charcoal,
+          color: 'white'
+        }
+      }
+    },
+    MuiButton: {
+      styleOverrides: {
+        contained: {
+          padding: '10px 20px',
+          height: 'min-content',
+          color: colors.cornflowerBlue,
+          bgColor: 'white',
+          textTransform: 'capitalize',
+          fontWeight: '500'
+        }
+      }
     }
   }
 });

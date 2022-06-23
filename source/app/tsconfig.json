@@ -3,13 +3,13 @@
     "module": "ESNext",
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
-    "target": "ES5",
+    "target": "ES6",
     "jsx": "react",
     "sourceMap": true,
     "experimentalDecorators": true,
     "lib": [
       "dom",
-      "ES2015"
+      "ESNext"
     ],
     "strict": true
   }

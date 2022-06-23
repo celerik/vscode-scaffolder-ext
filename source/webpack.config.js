@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   entry: path.join(__dirname, 'app', 'index.tsx'),
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.css']
   },
   devtool: 'inline-source-map',
   module: {
@@ -11,16 +11,16 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: '/node_modules/',
+        exclude: '/node_modules/'
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-      },
-    ],
+        use: ['style-loader', 'css-loader']
+      }
+    ]
   },
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'out', 'app'),
-  },
+    path: path.resolve(__dirname, 'out', 'app')
+  }
 };
