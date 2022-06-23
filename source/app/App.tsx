@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 /* global vscode, prevState, window */
 // packages
 import React, {
@@ -72,10 +71,10 @@ export const App = () => {
           <Route path="*" element={<Navigate to="/" />} />
           <Route path="/">
             {routes.map((route, index) => (
-              <Route key={index} index={!index} path={route.path} element={route.element}>
+              <Route key={route.path} index={!index} path={route.path} element={route.element}>
                 {!!route.routes && route.routes.map((subRoute, subIndex) => (
                   <Route
-                    key={subIndex}
+                    key={subRoute.path}
                     index={!subIndex}
                     path={subRoute.path}
                     element={subRoute.element}
