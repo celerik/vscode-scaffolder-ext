@@ -21,6 +21,7 @@ export class ViewLoader {
     const templateUrl = 'global.state';
     const state = context.globalState.get(templateUrl);
     if (!state) {
+      // Add a initial url value
       const data = JSON.stringify({ templateUrl: "https://github.com/celerik/celerik-scaffolder-templates.git" });
       context.globalState.update(templateUrl, data);
     }
@@ -97,6 +98,7 @@ export class ViewLoader {
       vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app', 'bundle.js'))
     );
 
+    // The global status of vs code is loaded and passed as a string to the webview.
     let prevState = this.context.globalState.get('global.state') || '';
     prevState = JSON.stringify(prevState).replace(/\\"/g, '\'');
 

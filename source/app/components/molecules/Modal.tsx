@@ -1,19 +1,31 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // packages
 import React, { useContext, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { Theme } from '@mui/material';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 // scripts
-import { StateMessage } from '../../../src/view/messages/messageTypes';
+import { GIT_URL } from '../../utils/regex';
 import { GlobalStateContext } from '../../context/MessageContext';
+
+// types
+type Fields = {
+  urlParam: string;
+};
+
+interface Props {
+  handleModalValue: (state: boolean) => void;
+  modalState: boolean;
+}
+
 
 const styles = {
   content: { display: 'flex', flexDirection: 'column' },
@@ -44,34 +56,30 @@ const styles = {
   }
 };
 
-export interface Props {
-  handleModalValue: (state: boolean) => void;
-  modalState: boolean;
-}
-
 export default function CustomizedDialogs({
   handleModalValue,
   modalState
 }: Props) {
   const { handleStateFromApp, globalStateFromExtension } = useContext(GlobalStateContext);
-  const [value, setValue] = React.useState<string>(globalStateFromExtension.templateUrl);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<Fields>();
 
   useEffect(() => {
-    setValue(globalStateFromExtension.templateUrl);
+    reset({ urlParam: globalStateFromExtension.templateUrl });
   }, [globalStateFromExtension.templateUrl]);
 
-  const onUpdateUrl = () => {
-    handleStateFromApp("templateUrl", value);
+  const onUpdateUrl: SubmitHandler<Fields> = (data) => {
+    handleStateFromApp("templateUrl", data.urlParam);
     handleModalValue(false);
   };
 
   const handleClose = () => {
-    setValue(globalStateFromExtension.templateUrl);
+    reset({ urlParam: globalStateFromExtension.templateUrl });
     handleModalValue(false);
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
   };
 
   return (
@@ -95,11 +103,27 @@ export default function CustomizedDialogs({
         </IconButton>
       </DialogTitle>
       <DialogContent dividers sx={styles.content}>
-        <Typography gutterBottom sx={{ color: "text.secondary" }} variant="body1">
-          Templates URL (GitHub):
-        </Typography>
-        <TextField id="outlined-basic" sx={styles.input} value={value} onChange={handleChange} size="small" variant="outlined" />
-        <Button variant="contained" onClick={onUpdateUrl} sx={styles.saveButton}>Save</Button>
+        <form onSubmit={handleSubmit(onUpdateUrl)} style={{ display: 'contents' }}>
+          <Typography gutterBottom sx={{ color: "text.secondary" }} variant="body1">
+            Templates URL (GitHub):
+          </Typography>
+          <TextField
+            id="outlined-basic"
+            sx={styles.input}
+            size="small"
+            error={Boolean(errors.urlParam)}
+            helperText={errors.urlParam?.message}
+            variant="outlined"
+            {...register('urlParam', {
+              required: true,
+              pattern: {
+                value: GIT_URL,
+                message: "Invalid url"
+              }
+            })}
+          />
+          <Button variant="contained" type='submit' sx={styles.saveButton}>Save</Button>
+        </form>
       </DialogContent>
     </Dialog>
   );

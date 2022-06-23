@@ -36,7 +36,6 @@ export const App = () => {
   };
 
   useEffect(() => {
-    debugger
     if (prevState) {
       const mapped = `${prevState.replace(/'/g, '"')}`;
       setGlobalStateFromExtension(JSON.parse(mapped));
