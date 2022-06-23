@@ -1,8 +1,8 @@
 /* global JSX */
 // packages
 import React from 'react';
-import Dashboard from '../components/pages/Dashboard';
-import Settings from '../components/pages/Settings';
+import Dashboard from '../components/pages/dashboard';
+import Settings from '../components/pages/settings';
 
 // scripts
 export type RouteConfig = {

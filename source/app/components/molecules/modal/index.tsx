@@ -9,12 +9,12 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import { Theme } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 // scripts
-import { GIT_URL } from '../../utils/regex';
-import { GlobalStateContext } from '../../context/MessageContext';
+import styles from './styles';
+import { GIT_URL } from '../../../utils/regex';
+import { GlobalStateContext } from '../../../context/MessageContext';
 
 // types
 type Fields = {
@@ -25,35 +25,6 @@ interface Props {
   handleModalValue: (state: boolean) => void;
   modalState: boolean;
 }
-
-const styles = {
-  content: { display: 'flex', flexDirection: 'column' },
-  saveButton: {
-    mt: 2,
-    width: '25%',
-    alignSelf: 'end'
-  },
-  titleContainer: { m: 0, pl: 2 },
-  title: { color: 'white', m: 0, fontWeight: 500 },
-  iconButton: {
-    position: 'absolute',
-    right: 3,
-    top: 1,
-    color: (theme: Theme) => theme.palette.grey[500]
-  },
-  input: {
-    '& .MuiOutlinedInput-root.Mui-focused': {
-      '& > fieldset': {
-        borderColor: 'secondary.main'
-      }
-    },
-    '& .MuiOutlinedInput-root:hover': {
-      '& > fieldset': {
-        borderColor: 'secondary.main'
-      }
-    }
-  }
-};
 
 export default function CustomizedDialogs({
   handleModalValue,

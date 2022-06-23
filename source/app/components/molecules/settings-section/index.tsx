@@ -1,7 +1,7 @@
 // packages
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
-import Modal from './Modal';
+import Modal from '../modal';
 
 const SettingsButton = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);

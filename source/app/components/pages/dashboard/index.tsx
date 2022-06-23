@@ -5,23 +5,8 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
 // scripts
-import SettingsButton from '../molecules/SettingsButton';
-
-// styles
-const styles = {
-  gridContainer: {
-    bgcolor: 'background.default',
-    height: '100vh',
-    padding: '10px 20px'
-  },
-  textContainer: {
-    margin: '10px 0px'
-  },
-  divider: {
-    borderColor: 'white',
-    width: '100%'
-  }
-};
+import SettingsButton from '../../molecules/settings-section';
+import styles from './styles';
 
 const Dashboard = () => (
   <Grid direction="column" container sx={styles.gridContainer}>
