@@ -1,16 +1,17 @@
+/* global JSX */
 // packages
 import React from 'react';
-import Dashboard from '../components/pages/Dashboard';
-import Settings from '../components/pages/Settings';
+import Dashboard from '../components/pages/dashboard';
+import Settings from '../components/pages/settings';
 
 // scripts
-export type RouteConfigComponentProps = Pick<RouteConfig, 'routes'>;
-
 export type RouteConfig = {
   path: string;
   element: JSX.Element;
   routes?: RouteConfig[];
 };
+
+export type RouteConfigComponentProps = Pick<RouteConfig, 'routes'>;
 
 export const routes: RouteConfig[] = [
   {
@@ -19,6 +20,6 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/settings',
-    element: <Settings />,
+    element: <Settings />
   }
 ];

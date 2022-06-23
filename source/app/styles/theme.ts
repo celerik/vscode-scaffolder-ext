@@ -19,7 +19,7 @@ const theme = createTheme({
   palette: {
     background: {
       default: colors.gunmetal,
-      paper: colors.policeBlue,
+      paper: colors.policeBlue
     },
     grey: {
       500: colors.philippineSilver,

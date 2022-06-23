@@ -1,12 +1,14 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { Message, CommonMessage } from './messages/messageTypes';
+import { Message, CommonMessage, StateMessage } from './messages/messageTypes';
 
 export class ViewLoader {
   public static currentPanel?: vscode.WebviewPanel;
 
   private panel: vscode.WebviewPanel;
+
   private context: vscode.ExtensionContext;
+
   private disposables: vscode.Disposable[];
 
   constructor(context: vscode.ExtensionContext) {
@@ -23,6 +25,15 @@ export class ViewLoader {
         localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app'))],
       }
     );
+    const templateUrl = 'global.state';
+    const state = context.globalState.get(templateUrl);
+    if (!state) {
+      // Add a initial url value
+      const data = JSON.stringify({
+        templateUrl: 'https://github.com/celerik/celerik-scaffolder-templates.git',
+      });
+      context.globalState.update(templateUrl, data);
+    }
 
     // render webview
     this.renderWebview();
@@ -32,6 +43,9 @@ export class ViewLoader {
       (message: Message) => {
         if (message.type === 'RELOAD') {
           vscode.commands.executeCommand('workbench.action.webview.reloadWebviewAction');
+        } else if (message.type === 'STATE') {
+          const text = (message as StateMessage).payload;
+          context.globalState.update(templateUrl, JSON.stringify(text));
         } else if (message.type === 'COMMON') {
           const text = (message as CommonMessage).payload;
           vscode.window.showInformationMessage(`${text}`);
@@ -59,14 +73,14 @@ export class ViewLoader {
   }
 
   static showWebview(context: vscode.ExtensionContext) {
-    const cls = this;
+    const Cls = this;
     const column = vscode.window.activeTextEditor
       ? vscode.window.activeTextEditor.viewColumn
       : undefined;
-    if (cls.currentPanel) {
-      cls.currentPanel.reveal(column);
+    if (Cls.currentPanel) {
+      Cls.currentPanel.reveal(column);
     } else {
-      cls.currentPanel = new cls(context).panel;
+      Cls.currentPanel = new Cls(context).panel;
     }
   }
 
@@ -95,6 +109,10 @@ export class ViewLoader {
       vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app', 'bundle.js'))
     );
 
+    // The global status of vs code is loaded and passed as a string to the webview.
+    let prevState = this.context.globalState.get('global.state') || '';
+    prevState = JSON.stringify(prevState).replace(/\\"/g, "'");
+
     return `
       <!DOCTYPE html>
         <html lang="en">
@@ -108,6 +126,7 @@ export class ViewLoader {
           <div id="root"></div>
           <script>
             const vscode = acquireVsCodeApi();
+            const prevState = ${prevState};
           </script>
           <script src="${bundleScriptPath}"></script>
         </body>

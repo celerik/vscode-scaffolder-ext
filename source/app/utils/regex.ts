@@ -1,1 +1,1 @@
-export const GIT_URL = /^(https|git)(:\/\/|@)([^\/:]+)[\/:]([^\/:]+)\/(.+).git$/;
+export const GIT_URL = /^(https|git)(:\/\/|@)([^/:]+)[/:]([^/:]+)\/(.+).git$/;

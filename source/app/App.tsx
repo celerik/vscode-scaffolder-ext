@@ -1,47 +1,69 @@
+/* global vscode, prevState, window */
 // packages
-import React, { useEffect, useState, useCallback } from 'react';
-import { routes } from './routes/config';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { Navigate, Route, Routes, BrowserRouter } from 'react-router-dom';
+import { routes } from './routes/config';
 
 // scripts
-import { MessagesContext } from './context/MessageContext';
-import { CommonMessage, Message, ReloadMessage } from '../src/view/messages/messageTypes';
+import { GlobalStateContext } from './context/MessageContext';
+import { CommonMessage, Message, StateMessage } from '../src/view/messages/messageTypes';
 
 export const App = () => {
-  const [messagesFromExtension, setMessagesFromExtension] = useState<string[]>([]);
-  console.log('this is the render');
-  const handleMessagesFromExtension = useCallback(
+  const [globalStateFromExtension, setGlobalStateFromExtension] = useState<Record<string, any>>({});
+
+  const handleStateFromExtension = useCallback(
     (event: MessageEvent<Message>) => {
       if (event.data.type === 'COMMON') {
         const message = event.data as CommonMessage;
-        setMessagesFromExtension([...messagesFromExtension, message.payload]);
+        setGlobalStateFromExtension({ ...globalStateFromExtension, message: message.payload });
       }
     },
-    [messagesFromExtension]
+    [globalStateFromExtension]
   );
+
+  const handleStateFromApp = (property: string, value: string) => {
+    const data = { ...globalStateFromExtension, [property]: value };
+    vscode.postMessage<StateMessage>({
+      type: 'STATE',
+      payload: { ...data },
+    });
+    setGlobalStateFromExtension({ ...data });
+  };
+
+  useEffect(() => {
+    if (prevState) {
+      const mapped = `${prevState.replace(/'/g, '"')}`;
+      setGlobalStateFromExtension(JSON.parse(mapped));
+    }
+  }, []);
 
   useEffect(() => {
     window.addEventListener('message', (event: MessageEvent<Message>) => {
-      handleMessagesFromExtension(event);
+      handleStateFromExtension(event);
     });
 
     return () => {
-      window.removeEventListener('message', handleMessagesFromExtension);
+      window.removeEventListener('message', handleStateFromExtension);
     };
-  }, [handleMessagesFromExtension]);
+  }, [handleStateFromExtension]);
+
+  const data = useMemo(
+    () => ({ globalStateFromExtension, handleStateFromApp }),
+    [globalStateFromExtension]
+  );
 
   return (
     <BrowserRouter>
-      <MessagesContext.Provider value={messagesFromExtension}>
+      <GlobalStateContext.Provider value={data}>
         <Routes>
           <Route path="*" element={<Navigate to="/" />} />
           <Route path="/">
             {routes.map((route, index) => (
-              <Route key={index} index={!index} path={route.path} element={route.element}>
+              <Route key={route.path} index={!index} path={route.path} element={route.element}>
                 {!!route.routes &&
                   route.routes.map((subRoute, subIndex) => (
                     <Route
-                      key={subIndex}
+                      key={subRoute.path}
                       index={!subIndex}
                       path={subRoute.path}
                       element={subRoute.element}
@@ -51,7 +73,7 @@ export const App = () => {
             ))}
           </Route>
         </Routes>
-      </MessagesContext.Provider>
+      </GlobalStateContext.Provider>
     </BrowserRouter>
   );
 };

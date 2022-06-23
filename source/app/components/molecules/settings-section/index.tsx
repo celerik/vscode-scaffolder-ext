@@ -1,7 +1,7 @@
 // packages
-import React, { useState } from "react";
-import Modal from "./Modal";
-import Button from "@mui/material/Button";
+import React, { useState } from 'react';
+import Button from '@mui/material/Button';
+import Modal from '../modal';
 
 const SettingsButton = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -10,7 +10,7 @@ const SettingsButton = () => {
 
   return (
     <>
-      <Button variant="contained" onClick={() => { setIsModalOpen(true) }} >Settings</Button>
+      <Button variant="contained" onClick={() => setIsModalOpen(true)}>Settings</Button>
       <Modal handleModalValue={handleModalValue} modalState={isModalOpen} />
     </>
   );
