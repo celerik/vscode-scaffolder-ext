@@ -2,13 +2,14 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "extends": "airbnb",
+  "extends": ["airbnb", "plugin:react/recommended"],
   "plugins": [
     "@typescript-eslint",
-    "react-hooks"
+    "react-hooks",
+    "react"
   ],
   "rules": {
     "@typescript-eslint/naming-convention": [
@@ -26,7 +27,14 @@
     "eqeqeq": "warn",
     "no-throw-literal": "warn",
     "semi": "off",
+    "comma-dangle":["error", "never"],
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
+    "import/no-unresolved": "off",
+    "import/extensions": 0,
+    "import/prefer-default-export": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/function-component-definition": 0
   }
 }

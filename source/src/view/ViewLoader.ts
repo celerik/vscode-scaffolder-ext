@@ -6,7 +6,9 @@ export class ViewLoader {
   public static currentPanel?: vscode.WebviewPanel;
 
   private panel: vscode.WebviewPanel;
+
   private context: vscode.ExtensionContext;
+
   private disposables: vscode.Disposable[];
 
   constructor(context: vscode.ExtensionContext) {
@@ -16,16 +18,15 @@ export class ViewLoader {
     this.panel = vscode.window.createWebviewPanel('celerikScaffolder', 'Celerik Scaffolder', vscode.ViewColumn.One, {
       enableScripts: true,
       retainContextWhenHidden: true,
-      localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app'))],
+      localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app'))]
     });
     const templateUrl = 'global.state';
     const state = context.globalState.get(templateUrl);
     if (!state) {
       // Add a initial url value
-      const data = JSON.stringify({ templateUrl: "https://github.com/celerik/celerik-scaffolder-templates.git" });
+      const data = JSON.stringify({ templateUrl: 'https://github.com/celerik/celerik-scaffolder-templates.git' });
       context.globalState.update(templateUrl, data);
     }
-
 
     // render webview
     this.renderWebview();
@@ -62,14 +63,14 @@ export class ViewLoader {
   }
 
   static showWebview(context: vscode.ExtensionContext) {
-    const cls = this;
+    const Cls = this;
     const column = vscode.window.activeTextEditor
       ? vscode.window.activeTextEditor.viewColumn
       : undefined;
-    if (cls.currentPanel) {
-      cls.currentPanel.reveal(column);
+    if (Cls.currentPanel) {
+      Cls.currentPanel.reveal(column);
     } else {
-      cls.currentPanel = new cls(context).panel;
+      Cls.currentPanel = new Cls(context).panel;
     }
   }
 

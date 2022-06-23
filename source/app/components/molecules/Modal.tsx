@@ -26,7 +26,6 @@ interface Props {
   modalState: boolean;
 }
 
-
 const styles = {
   content: { display: 'flex', flexDirection: 'column' },
   saveButton: {
@@ -35,22 +34,22 @@ const styles = {
     alignSelf: 'end'
   },
   titleContainer: { m: 0, pl: 2 },
-  title: { color: "white", m: 0, fontWeight: 500 },
+  title: { color: 'white', m: 0, fontWeight: 500 },
   iconButton: {
     position: 'absolute',
     right: 3,
     top: 1,
-    color: (theme: Theme) => theme.palette.grey[500],
+    color: (theme: Theme) => theme.palette.grey[500]
   },
   input: {
-    "& .MuiOutlinedInput-root.Mui-focused": {
-      "& > fieldset": {
-        borderColor: "secondary.main"
+    '& .MuiOutlinedInput-root.Mui-focused': {
+      '& > fieldset': {
+        borderColor: 'secondary.main'
       }
     },
-    "& .MuiOutlinedInput-root:hover": {
-      "& > fieldset": {
-        borderColor: "secondary.main"
+    '& .MuiOutlinedInput-root:hover': {
+      '& > fieldset': {
+        borderColor: 'secondary.main'
       }
     }
   }
@@ -73,7 +72,7 @@ export default function CustomizedDialogs({
   }, [globalStateFromExtension.templateUrl]);
 
   const onUpdateUrl: SubmitHandler<Fields> = (data) => {
-    handleStateFromApp("templateUrl", data.urlParam);
+    handleStateFromApp('templateUrl', data.urlParam);
     handleModalValue(false);
   };
 
@@ -91,7 +90,7 @@ export default function CustomizedDialogs({
       maxWidth="sm"
     >
       <DialogTitle sx={styles.titleContainer} component="div">
-        <Typography gutterBottom variant='h5' sx={styles.title}>
+        <Typography gutterBottom variant="h5" sx={styles.title}>
           Settings
         </Typography>
         <IconButton
@@ -104,7 +103,7 @@ export default function CustomizedDialogs({
       </DialogTitle>
       <DialogContent dividers sx={styles.content}>
         <form onSubmit={handleSubmit(onUpdateUrl)} style={{ display: 'contents' }}>
-          <Typography gutterBottom sx={{ color: "text.secondary" }} variant="body1">
+          <Typography gutterBottom sx={{ color: 'text.secondary' }} variant="body1">
             Templates URL (GitHub):
           </Typography>
           <TextField
@@ -118,11 +117,11 @@ export default function CustomizedDialogs({
               required: true,
               pattern: {
                 value: GIT_URL,
-                message: "Invalid url"
+                message: 'Invalid url'
               }
             })}
           />
-          <Button variant="contained" type='submit' sx={styles.saveButton}>Save</Button>
+          <Button variant="contained" type="submit" sx={styles.saveButton}>Save</Button>
         </form>
       </DialogContent>
     </Dialog>

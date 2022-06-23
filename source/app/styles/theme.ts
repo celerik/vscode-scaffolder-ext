@@ -10,7 +10,7 @@ const colors = {
   charcoal: '#354459',
   cornflowerBlue: '#708AEF',
   gunmetal: '#263344',
-  japaneseIndigo: "#293648",
+  japaneseIndigo: '#293648',
   philippineSilver: '#B3B3B3',
   policeBlue: '#394A61',
   white: '#FFFFFF'
@@ -20,7 +20,7 @@ const theme = createTheme({
   palette: {
     background: {
       default: colors.gunmetal,
-      paper: colors.policeBlue,
+      paper: colors.policeBlue
     },
     grey: {
       500: colors.philippineSilver
@@ -75,8 +75,8 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         contained: {
-          padding: "10px 20px",
-          height: "min-content",
+          padding: '10px 20px',
+          height: 'min-content',
           color: colors.cornflowerBlue,
           bgColor: 'white',
           textTransform: 'capitalize',

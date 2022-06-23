@@ -23,16 +23,14 @@ const styles = {
   }
 };
 
-const Dashboard = () => {
-  return (
-    <Grid direction='column' container sx={styles.gridContainer}>
-      <Grid direction="row" justifyContent="space-between" alignItems="center" container item>
-        <Typography variant='h2' sx={styles.textContainer}>Celerik Scaffolder</Typography>
-        <SettingsButton />
-      </Grid>
-      <Divider sx={styles.divider} />
-    </Grid >
-  );
-};
+const Dashboard = () => (
+  <Grid direction="column" container sx={styles.gridContainer}>
+    <Grid direction="row" justifyContent="space-between" alignItems="center" container item>
+      <Typography variant="h2" sx={styles.textContainer}>Celerik Scaffolder</Typography>
+      <SettingsButton />
+    </Grid>
+    <Divider sx={styles.divider} />
+  </Grid>
+);
 
 export default Dashboard;

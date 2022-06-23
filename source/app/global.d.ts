@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 type Message = import('../src/view/messages/messageTypes').Message;
 
 type VSCode = {

@@ -33,7 +33,7 @@
     "compile": "npm-run-all compile:*",
     "compile:extension": "tsc -p ./",
     "compile:view": "webpack --mode development",
-    "lint": "eslint src --ext ts",
+    "lint": "eslint src app --ext ts",
     "pretest": "npm run compile && npm run lint",
     "test": "node ./out/test/runTest.js",
     "vscode:prepublish": "npm run compile",
