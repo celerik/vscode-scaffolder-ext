@@ -1,7 +1,11 @@
 /* global vscode, prevState, window */
 // packages
-import React, { useEffect, useMemo, useState, useCallback } from 'react';
-import { Navigate, Route, Routes, BrowserRouter } from 'react-router-dom';
+import React, {
+  useEffect, useMemo, useState, useCallback
+} from 'react';
+import {
+  Navigate, Route, Routes, BrowserRouter
+} from 'react-router-dom';
 import { routes } from './routes/config';
 
 // scripts
@@ -25,7 +29,7 @@ export const App = () => {
     const data = { ...globalStateFromExtension, [property]: value };
     vscode.postMessage<StateMessage>({
       type: 'STATE',
-      payload: { ...data },
+      payload: { ...data }
     });
     setGlobalStateFromExtension({ ...data });
   };
@@ -60,8 +64,8 @@ export const App = () => {
           <Route path="/">
             {routes.map((route, index) => (
               <Route key={route.path} index={!index} path={route.path} element={route.element}>
-                {!!route.routes &&
-                  route.routes.map((subRoute, subIndex) => (
+                {!!route.routes
+                  && route.routes.map((subRoute, subIndex) => (
                     <Route
                       key={subRoute.path}
                       index={!subIndex}

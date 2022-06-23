@@ -1,38 +1,29 @@
 // Package
-import * as React from 'react';
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
+import React, { useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 
 // Scripts
-import { IFolder } from '../../utils/interfaces/remoteFolders.interface';
-import { remoteList } from '../../api/remote-list';
-import ListItem from '../molecules/ListItem';
+import { IFolder } from '../../../utils/interfaces/remoteFolders.interface';
+import { remoteList } from '../../../api/remote-list';
+import ListItem from '../../molecules/row-list';
+import styles from './styles';
 
-const styles = {
-  list: {
-    bgcolor: 'background.paper',
-  },
-  paper: {
-    bgcolor: 'background.paper',
-    padding: '7px 0px 7px 15px',
-    margin: '5px 0px',
-  },
-  title: {
-    color: 'white',
-  },
-};
-const ListItems = function () {
+const ListItems = () => {
   const [list, setList] = React.useState<IFolder[]>([]);
+
   const getFolders = async () => {
     const data = await remoteList.getListOfFolders(
       'https://github.com/celerik/celerik-scaffolder-templates.git'
     );
     setList(data);
   };
-  React.useEffect(() => {
+
+  useEffect(() => {
     getFolders();
   }, []);
+
   return (
     <>
       <Paper sx={styles.paper} elevation={0}>
@@ -41,8 +32,8 @@ const ListItems = function () {
         </Typography>
       </Paper>
       <List sx={styles.list}>
-        {list.map(folder => (
-          <ListItem nameFolder={folder.name} link={folder.html_url} />
+        {list.map((folder) => (
+          <ListItem key={folder.name} nameFolder={folder.name} link={folder.html_url} />
         ))}
       </List>
     </>

@@ -22,7 +22,7 @@ export class ViewLoader {
       {
         enableScripts: true,
         retainContextWhenHidden: true,
-        localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app'))],
+        localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app'))]
       }
     );
     const templateUrl = 'global.state';
@@ -30,7 +30,7 @@ export class ViewLoader {
     if (!state) {
       // Add a initial url value
       const data = JSON.stringify({
-        templateUrl: 'https://github.com/celerik/celerik-scaffolder-templates.git',
+        templateUrl: 'https://github.com/celerik/celerik-scaffolder-templates.git'
       });
       context.globalState.update(templateUrl, data);
     }

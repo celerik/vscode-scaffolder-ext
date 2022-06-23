@@ -10,7 +10,9 @@ const SettingsButton = () => {
 
   return (
     <>
-      <Button variant="contained" onClick={() => setIsModalOpen(true)}>Settings</Button>
+      <Button variant="contained" onClick={() => setIsModalOpen(true)}>
+        Settings
+      </Button>
       <Modal handleModalValue={handleModalValue} modalState={isModalOpen} />
     </>
   );

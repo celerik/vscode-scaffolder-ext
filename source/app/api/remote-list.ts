@@ -1,3 +1,4 @@
+/* global vscode */
 // @packages
 import axios from 'axios';
 
@@ -17,7 +18,7 @@ class RemoteList {
     } catch (error) {
       vscode.postMessage<ErrorMessage>({
         type: 'ERROR',
-        payload: 'this is a test message',
+        payload: 'this is a test message'
       });
       throw error;
     }
