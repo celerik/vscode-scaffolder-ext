@@ -7,10 +7,10 @@ import Typography from '@mui/material/Typography';
 // Scripts
 import { IFolder } from '../../../utils/interfaces/remoteFolders.interface';
 import { remoteList } from '../../../api/remote-list';
-import ListItem from '../../molecules/row-list';
+import ListItem from '../../molecules/row-item-template';
 import styles from './styles';
 
-const ListItems = () => {
+const TemplateList = () => {
   const [list, setList] = React.useState<IFolder[]>([]);
 
   const getFolders = async () => {
@@ -40,4 +40,4 @@ const ListItems = () => {
   );
 };
 
-export default ListItems;
+export default TemplateList;

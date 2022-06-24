@@ -3,7 +3,7 @@ import React from 'react';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-import ListItems from '../../organisms/list-items';
+import TemplateList from '../../organisms/template-list';
 
 // scripts
 import SettingsButton from '../../molecules/settings-section';
@@ -19,7 +19,7 @@ const Dashboard = () => (
     </Grid>
     <Divider sx={styles.divider} />
     <Grid sx={styles.list}>
-      <ListItems />
+      <TemplateList />
     </Grid>
   </Grid>
 );

@@ -12,7 +12,7 @@ class RemoteList {
   async getListOfFolders(urlRepo: string): Promise<Array<IFolder>> {
     try {
       const urlArray = GIT_URL.exec(urlRepo) || [];
-      const urlgitHub = `${API_URL_GITHUB}${urlArray[4]}/${urlArray[5]}/contents`;
+      const urlgitHub = urlArray.length >= 6 ? `${API_URL_GITHUB}${urlArray[4]}/${urlArray[5]}/contents` : API_URL_GITHUB;
       const result = await axios.get(urlgitHub);
       return result.data.filter((item: IFolder) => item.type === 'dir');
     } catch (error) {

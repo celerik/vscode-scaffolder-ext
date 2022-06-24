@@ -15,7 +15,7 @@ export interface Props {
   link: string;
 }
 
-const RowList = ({ nameFolder, link }: Props) => (
+const RowItemTemplate = ({ nameFolder, link }: Props) => (
   <>
     <ListItem>
       <Grid container>
@@ -38,4 +38,4 @@ const RowList = ({ nameFolder, link }: Props) => (
   </>
 );
 
-export default RowList;
+export default RowItemTemplate;
