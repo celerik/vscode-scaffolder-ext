@@ -35,7 +35,7 @@
       "never"
     ],
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/exhaustive-deps": "off",
     "react/jsx-filename-extension": [
       1,
       {
@@ -51,6 +51,7 @@
     "import/extensions": 0,
     "import/prefer-default-export": "off",
     "react/jsx-props-no-spreading": "off",
-    "react/function-component-definition": 0
+    "react/function-component-definition": 0,
+    "class-methods-use-this":0
   }
 }

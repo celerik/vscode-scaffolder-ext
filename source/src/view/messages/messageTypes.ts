@@ -1,4 +1,4 @@
-export type MessageType = 'RELOAD' | 'COMMON' | 'STATE';
+export type MessageType = 'RELOAD' | 'COMMON' | 'ERROR' | 'STATE';
 
 export interface Message {
   type: MessageType;
@@ -17,4 +17,9 @@ export interface StateMessage extends Message {
 
 export interface ReloadMessage extends Message {
   type: 'RELOAD';
+}
+
+export interface ErrorMessage extends Message {
+  type: 'ERROR';
+  payload: string;
 }

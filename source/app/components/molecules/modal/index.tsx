@@ -25,10 +25,7 @@ interface Props {
   modalState: boolean;
 }
 
-export default function CustomizedDialogs({
-  handleModalValue,
-  modalState
-}: Props) {
+export default function CustomizedDialogs({ handleModalValue, modalState }: Props) {
   const { handleStateFromApp, globalStateFromExtension } = useContext(GlobalStateContext);
   const {
     register,
@@ -41,7 +38,7 @@ export default function CustomizedDialogs({
     reset({ urlParam: globalStateFromExtension.templateUrl });
   }, [globalStateFromExtension.templateUrl]);
 
-  const onUpdateUrl: SubmitHandler<Fields> = (data) => {
+  const onUpdateUrl: SubmitHandler<Fields> = (data: Fields) => {
     handleStateFromApp('templateUrl', data.urlParam);
     handleModalValue(false);
   };
@@ -52,22 +49,12 @@ export default function CustomizedDialogs({
   };
 
   return (
-    <Dialog
-      open={modalState}
-      disableEscapeKeyDown
-      fullWidth
-      sx={{ borderRadius: 0 }}
-      maxWidth="sm"
-    >
+    <Dialog open={modalState} disableEscapeKeyDown fullWidth sx={{ borderRadius: 0 }} maxWidth="sm">
       <DialogTitle sx={styles.titleContainer} component="div">
         <Typography gutterBottom variant="h5" sx={styles.title}>
           Settings
         </Typography>
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={styles.iconButton}
-        >
+        <IconButton aria-label="close" onClick={handleClose} sx={styles.iconButton}>
           <CloseIcon />
         </IconButton>
       </DialogTitle>
@@ -91,7 +78,9 @@ export default function CustomizedDialogs({
               }
             })}
           />
-          <Button variant="contained" type="submit" sx={styles.saveButton}>Save</Button>
+          <Button variant="contained" type="submit" sx={styles.saveButton}>
+            Save
+          </Button>
         </form>
       </DialogContent>
     </Dialog>

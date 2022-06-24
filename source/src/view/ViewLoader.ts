@@ -16,16 +16,23 @@ export class ViewLoader {
     this.context = context;
     this.disposables = [];
 
-    this.panel = vscode.window.createWebviewPanel('celerikScaffolder', 'Celerik Scaffolder', vscode.ViewColumn.One, {
-      enableScripts: true,
-      retainContextWhenHidden: true,
-      localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app'))]
-    });
+    this.panel = vscode.window.createWebviewPanel(
+      'celerikScaffolder',
+      'Celerik Scaffolder',
+      vscode.ViewColumn.One,
+      {
+        enableScripts: true,
+        retainContextWhenHidden: true,
+        localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app'))]
+      }
+    );
     const templateUrl = 'global.state';
     const state = context.globalState.get(templateUrl);
     if (!state) {
       // Add a initial url value
-      const data = JSON.stringify({ templateUrl: 'https://github.com/celerik/celerik-scaffolder-templates.git' });
+      const data = JSON.stringify({
+        templateUrl: 'https://github.com/celerik/celerik-scaffolder-templates.git'
+      });
       context.globalState.update(templateUrl, data);
     }
 
@@ -42,7 +49,10 @@ export class ViewLoader {
           context.globalState.update(templateUrl, JSON.stringify(text));
         } else if (message.type === 'COMMON') {
           const text = (message as CommonMessage).payload;
-          vscode.window.showInformationMessage(`Received message from Webview: ${text}`);
+          vscode.window.showInformationMessage(`${text}`);
+        } else if (message.type === 'ERROR') {
+          const text = (message as CommonMessage).payload;
+          vscode.window.showErrorMessage(`${text}`);
         }
       },
       null,
@@ -106,7 +116,8 @@ export class ViewLoader {
     prevState = JSON.stringify(prevState).replace(/\\"/g, '\'');
 
     try {
-      localTemplates = fs.readdirSync(`${this.context.extensionPath}\\Scaffolding`);
+      if (!vscode.workspace.workspaceFolders) throw new Error();
+      localTemplates = fs.readdirSync(`${vscode.workspace.workspaceFolders[0].uri.fsPath}\\Scaffolding`);
     } catch (error) {
       localTemplates = [];
     }
