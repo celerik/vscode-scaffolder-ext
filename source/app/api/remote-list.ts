@@ -18,7 +18,7 @@ class RemoteList {
     } catch (error) {
       vscode.postMessage<ErrorMessage>({
         type: 'ERROR',
-        payload: 'this is a test message'
+        payload: error as string
       });
       throw error;
     }
