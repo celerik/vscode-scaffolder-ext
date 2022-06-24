@@ -1,24 +1,16 @@
 /* global vscode, prevState, window */
 // packages
 import React, {
-  useEffect,
-  useMemo,
-  useState,
-  useCallback
+  useEffect, useMemo, useState, useCallback
 } from 'react';
 import {
-  Navigate,
-  Route,
-  Routes,
-  BrowserRouter
+  Navigate, Route, Routes, BrowserRouter
 } from 'react-router-dom';
 import { routes } from './routes/config';
 
 // scripts
 import { GlobalStateContext } from './context/MessageContext';
-import {
-  CommonMessage, Message, StateMessage
-} from '../src/view/messages/messageTypes';
+import { CommonMessage, Message, StateMessage } from '../src/view/messages/messageTypes';
 
 export const App = () => {
   const [globalStateFromExtension, setGlobalStateFromExtension] = useState<Record<string, any>>({});
@@ -72,14 +64,15 @@ export const App = () => {
           <Route path="/">
             {routes.map((route, index) => (
               <Route key={route.path} index={!index} path={route.path} element={route.element}>
-                {!!route.routes && route.routes.map((subRoute, subIndex) => (
-                  <Route
-                    key={subRoute.path}
-                    index={!subIndex}
-                    path={subRoute.path}
-                    element={subRoute.element}
-                  />
-                ))}
+                {!!route.routes
+                  && route.routes.map((subRoute, subIndex) => (
+                    <Route
+                      key={subRoute.path}
+                      index={!subIndex}
+                      path={subRoute.path}
+                      element={subRoute.element}
+                    />
+                  ))}
               </Route>
             ))}
           </Route>

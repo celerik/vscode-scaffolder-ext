@@ -1,8 +1,5 @@
 // @packages
-import {
-  createTheme,
-  PaletteOptions
-} from '@mui/material/styles';
+import { createTheme, PaletteOptions } from '@mui/material/styles';
 
 type IPalette = PaletteOptions;
 
@@ -13,7 +10,9 @@ const colors = {
   japaneseIndigo: '#293648',
   philippineSilver: '#B3B3B3',
   policeBlue: '#394A61',
-  white: '#FFFFFF'
+  white: '#FFFFFF',
+  lavanderGrey: '#BEC2D1',
+  hanBlue: '#3A78D1'
 };
 
 const theme = createTheme({
@@ -33,7 +32,8 @@ const theme = createTheme({
     },
     text: {
       primary: colors.cornflowerBlue,
-      secondary: colors.philippineSilver
+      secondary: colors.philippineSilver,
+      third: colors.lavanderGrey
     }
   } as IPalette,
   typography: {
@@ -81,6 +81,9 @@ const theme = createTheme({
           bgColor: 'white',
           textTransform: 'capitalize',
           fontWeight: '500'
+        },
+        text: {
+          color: colors.hanBlue
         }
       }
     }

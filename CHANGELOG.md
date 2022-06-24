@@ -6,4 +6,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-- Initial release
+- Beginning the vscode extension with vanillaJS
+- Added contextual menu on options of the right-click menu
+- Added option to open the Celerik Scaffolder to the menu
+- Restructuring and adding react-app to the project

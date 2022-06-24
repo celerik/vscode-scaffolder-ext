@@ -10,5 +10,8 @@ export default {
   divider: {
     borderColor: 'white',
     width: '100%'
+  },
+  list: {
+    marginTop: '20px'
   }
-}
+};
