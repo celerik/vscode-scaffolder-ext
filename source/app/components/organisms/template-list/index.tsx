@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 
 // Scripts
-import ListItem from '../../molecules/row-list';
+import ListItem from '../../molecules/row-item-template';
 import styles from './styles';
 import { GlobalStateContext } from '../../../context/MessageContext';
 import { IFolder } from '../../../utils/interfaces/remoteFolders.interface';
@@ -17,7 +17,7 @@ interface Props {
   localData?: IFolder[];
 }
 
-const ListItems = ({ isRemote, localData }: Props) => {
+const TemplateList = ({ isRemote, localData }: Props) => {
   const [list, setList] = useState<IFolder[]>([]);
   const { globalStateFromExtension } = useContext(GlobalStateContext);
 
@@ -62,9 +62,9 @@ const ListItems = ({ isRemote, localData }: Props) => {
   );
 };
 
-ListItems.defaultProps = {
+TemplateList.defaultProps = {
   isRemote: false,
   localData: []
 };
 
-export default ListItems;
+export default TemplateList;
