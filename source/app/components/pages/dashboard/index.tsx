@@ -28,8 +28,9 @@ const Dashboard = () => {
           Celerik Scaffolder
         </Typography>
         <SettingsButton />
+        <Divider sx={styles.divider} />
+
       </Grid>
-      <Divider sx={styles.divider} />
       <Grid sx={styles.list}>
         <TemplateList isRemote />
         <TemplateList localData={localData} />
