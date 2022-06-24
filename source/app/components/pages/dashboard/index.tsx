@@ -29,7 +29,6 @@ const Dashboard = () => {
         </Typography>
         <SettingsButton />
         <Divider sx={styles.divider} />
-
       </Grid>
       <Grid sx={styles.list}>
         <TemplateList isRemote />
