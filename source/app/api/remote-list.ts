@@ -15,12 +15,12 @@ class RemoteList {
       const urlgitHub = urlArray.length >= 6 ? `${API_URL_GITHUB}${urlArray[4]}/${urlArray[5]}/contents` : API_URL_GITHUB;
       const result = await axios.get(urlgitHub);
       return result.data.filter((item: IFolder) => item.type === 'dir');
-    } catch (error) {
+    } catch (error: any) {
       vscode.postMessage<ErrorMessage>({
         type: 'ERROR',
-        payload: error as string
+        payload: error.message
       });
-      throw error;
+      return [];
     }
   }
 }

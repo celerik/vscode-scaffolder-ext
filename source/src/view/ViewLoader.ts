@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import * as fs from 'fs';
 import { Message, CommonMessage, StateMessage } from './messages/messageTypes';
 
 export class ViewLoader {
@@ -111,7 +112,15 @@ export class ViewLoader {
 
     // The global status of vs code is loaded and passed as a string to the webview.
     let prevState = this.context.globalState.get('global.state') || '';
-    prevState = JSON.stringify(prevState).replace(/\\"/g, "'");
+    let localTemplates: string[];
+    prevState = JSON.stringify(prevState).replace(/\\"/g, '\'');
+
+    try {
+      if (!vscode.workspace.workspaceFolders) throw new Error();
+      localTemplates = fs.readdirSync(`${vscode.workspace.workspaceFolders[0].uri.fsPath}\\Scaffolding`);
+    } catch (error) {
+      localTemplates = [];
+    }
 
     return `
       <!DOCTYPE html>
@@ -127,6 +136,7 @@ export class ViewLoader {
           <script>
             const vscode = acquireVsCodeApi();
             const prevState = ${prevState};
+            const localTemplates = "${localTemplates}"
           </script>
           <script src="${bundleScriptPath}"></script>
         </body>

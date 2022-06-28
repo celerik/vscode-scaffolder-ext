@@ -12,7 +12,7 @@ import styles from './styles';
 
 export interface Props {
   nameFolder: string;
-  link: string;
+  link: string | undefined;
 }
 
 const RowItemTemplate = ({ nameFolder, link }: Props) => (
@@ -20,12 +20,14 @@ const RowItemTemplate = ({ nameFolder, link }: Props) => (
     <ListItem>
       <Grid container>
         <Grid xs={7} md={9} item container alignItems="center">
-          <Typography sx={{ fontSize: '18px', ...styles.textFolder }}>{nameFolder}</Typography>
+          <Typography variant="body1" sx={styles.textFolder}>{nameFolder}</Typography>
         </Grid>
         <Grid xs={3} md={2} item container alignItems="center">
-          <Link href={link} sx={{ fontSize: '18px' }} underline="always">
-            Open in Github
-          </Link>
+          {link && (
+            <Link href={link} sx={{ fontSize: '12px' }} underline="always">
+              Open in Github
+            </Link>
+          )}
         </Grid>
         <Grid xs={2} md={1} item>
           <Button variant="text" sx={styles.buttonSelect}>
