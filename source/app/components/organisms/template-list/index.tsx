@@ -1,70 +1,41 @@
 // Package
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 
 // Scripts
 import ListItem from '../../molecules/row-item-template';
 import styles from './styles';
-import { GlobalStateContext } from '../../../context/MessageContext';
 import { IFolder } from '../../../utils/interfaces/remoteFolders.interface';
-import { remoteList } from '../../../api/remote-list';
 
 interface Props {
-  isRemote?: boolean;
-  localData?: IFolder[];
+  title: string;
+  data: IFolder[];
 }
 
-const TemplateList = ({ isRemote, localData }: Props) => {
-  const [list, setList] = useState<IFolder[]>([]);
-  const { globalStateFromExtension } = useContext(GlobalStateContext);
-
-  const getFolders = async () => {
-    if (globalStateFromExtension.templateUrl) {
-      const data = await remoteList.getListOfFolders(
-        globalStateFromExtension.templateUrl
-      );
-      setList(data);
-    }
-  };
-
-  useEffect(() => {
-    if (isRemote) {
-      getFolders();
-    } else if (localData?.length) {
-      setList([...localData]);
-    }
-  }, [globalStateFromExtension.templateUrl, localData]);
-
-  return (
-    <Grid item sx={{ mb: 3 }}>
-      <Paper sx={styles.paper} elevation={0}>
-        <Typography variant="h5" sx={styles.title}>
-          {isRemote ? 'Remote Templates' : 'Local Templates'}
+const TemplateList = ({ title, data }: Props) => (
+  <Grid item sx={{ mb: 3 }}>
+    <Paper sx={styles.paper} elevation={0}>
+      <Typography variant="h5" sx={styles.title}>
+        {title}
+      </Typography>
+    </Paper>
+    <List sx={styles.list}>
+      {data.length ? data.map((folder) => (
+        <ListItem
+          key={(folder.name || folder) as React.Key}
+          nameFolder={(folder.name || folder) as string}
+          link={folder.html_url}
+        />
+      )) : (
+        <Typography variant="h5" sx={styles.noResourceLabel}>
+          No resources found
         </Typography>
-      </Paper>
-      <List sx={styles.list}>
-        {list.length ? list.map((folder) => (
-          <ListItem
-            key={(folder.name || folder) as React.Key}
-            nameFolder={(folder.name || folder) as string}
-            link={folder.html_url}
-          />
-        )) : (
-          <Typography variant="h5" sx={styles.noResourceLabel}>
-            No resources found
-          </Typography>
-        )}
-      </List>
-    </Grid>
-  );
-};
-
-TemplateList.defaultProps = {
-  isRemote: false,
-  localData: []
-};
+      )}
+    </List>
+  </Grid>
+);
 
 export default TemplateList;

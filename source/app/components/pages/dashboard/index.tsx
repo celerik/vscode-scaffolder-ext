@@ -1,6 +1,6 @@
 /* global localTemplates */
 // packages
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
@@ -9,10 +9,27 @@ import TemplateList from '../../organisms/template-list';
 // scripts
 import SettingsButton from '../../molecules/settings-section';
 import styles from './styles';
+import { GlobalStateContext } from '../../../context/MessageContext';
 import { IFolder } from '../../../utils/interfaces/remoteFolders.interface';
+import { remoteList } from '../../../api/remote-list';
 
 const Dashboard = () => {
   const [localData, setLocalData] = useState<IFolder[]>([]);
+  const [remoteData, setRemoteData] = useState<IFolder[]>([]);
+  const { globalStateFromExtension } = useContext(GlobalStateContext);
+
+  const getRemoteFolders = async () => {
+    if (globalStateFromExtension.templateUrl) {
+      const data = await remoteList.getListOfFolders(
+        globalStateFromExtension.templateUrl
+      );
+      setRemoteData(data);
+    }
+  };
+
+  useEffect(() => {
+    getRemoteFolders();
+  }, [globalStateFromExtension.templateUrl]);
 
   useEffect(() => {
     if (localTemplates) {
@@ -22,7 +39,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <Grid direction="column" container sx={styles.gridContainer}>
+    <Grid direction="column" alignContent="baseline" container sx={styles.gridContainer}>
       <Grid direction="row" justifyContent="space-between" alignItems="center" container item>
         <Typography variant="h2" sx={styles.textContainer}>
           Celerik Scaffolder
@@ -30,9 +47,9 @@ const Dashboard = () => {
         <SettingsButton />
         <Divider sx={styles.divider} />
       </Grid>
-      <Grid sx={styles.list}>
-        <TemplateList isRemote />
-        <TemplateList localData={localData} />
+      <Grid sx={styles.list} item>
+        <TemplateList data={remoteData} title="Remote Templates" />
+        <TemplateList data={localData} title="Local Templates" />
       </Grid>
     </Grid>
   );
