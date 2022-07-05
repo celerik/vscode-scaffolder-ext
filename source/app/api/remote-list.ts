@@ -8,12 +8,31 @@ import { ErrorMessage } from '../../src/view/messages/messageTypes';
 import { GIT_URL } from '../utils/regex';
 import { IFolder } from '../utils/interfaces/remoteFolders.interface';
 
-class RemoteList {
-  async getListOfFolders(urlRepo: string): Promise<Array<IFolder>> {
+export class RemoteList {
+  urlRepo: string;
+
+  constructor(urlRepo: string) {
+    this.urlRepo = urlRepo;
+  }
+
+  async getConfigFile(nameFolder: string): Promise<Array<string>> {
     try {
-      const urlArray = GIT_URL.exec(urlRepo) || [];
-      const urlgitHub = urlArray.length >= 6 ? `${API_URL_GITHUB}${urlArray[4]}/${urlArray[5]}/contents` : API_URL_GITHUB;
-      const result = await axios.get(urlgitHub);
+      const urlgitHub = `${this.getUrlRepo()}/${nameFolder}/config.json`;
+      const infoFile = await axios.get(urlgitHub);
+      const request = await axios.get(infoFile.data.download_url);
+      return request.data.variables;
+    } catch (error) {
+      vscode.postMessage<ErrorMessage>({
+        type: 'ERROR',
+        payload: error as string
+      });
+      throw error;
+    }
+  }
+
+  async getListOfFolders(): Promise<Array<IFolder>> {
+    try {
+      const result = await axios.get(this.getUrlRepo());
       return result.data.filter((item: IFolder) => item.type === 'dir');
     } catch (error) {
       vscode.postMessage<ErrorMessage>({
@@ -23,5 +42,13 @@ class RemoteList {
       throw error;
     }
   }
+
+  getUrlRepo() {
+    const urlArray = GIT_URL.exec(this.urlRepo) || [];
+    const urlgitHub = urlArray.length >= 6
+      ? `${API_URL_GITHUB}${urlArray[4]}/${urlArray[5]}/contents`
+      : API_URL_GITHUB;
+    return urlgitHub;
+  }
 }
-export const remoteList = new RemoteList();
+// export const remoteList = new RemoteList();

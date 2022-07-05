@@ -13,9 +13,10 @@ import styles from './styles';
 export interface Props {
   nameFolder: string;
   link: string;
+  functionSelect: () => {};
 }
 
-const RowItemTemplate = ({ nameFolder, link }: Props) => (
+const RowItemTemplate = ({ nameFolder, link, functionSelect }: Props) => (
   <>
     <ListItem>
       <Grid container>
@@ -28,7 +29,7 @@ const RowItemTemplate = ({ nameFolder, link }: Props) => (
           </Link>
         </Grid>
         <Grid xs={2} md={1} item>
-          <Button variant="text" sx={styles.buttonSelect}>
+          <Button onClick={functionSelect} variant="text" sx={styles.buttonSelect}>
             select
           </Button>
         </Grid>

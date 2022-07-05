@@ -1,22 +1,23 @@
 // Package
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 
 // Scripts
 import { IFolder } from '../../../utils/interfaces/remoteFolders.interface';
-import { remoteList } from '../../../api/remote-list';
+import { RemoteList } from '../../../api/remote-list';
 import ListItem from '../../molecules/row-item-template';
 import styles from './styles';
 
 const TemplateList = () => {
-  const [list, setList] = React.useState<IFolder[]>([]);
+  const [list, setList] = useState<IFolder[]>([]);
+
+  const urlGithub = 'https://github.com/celerik/celerik-scaffolder-templates.git';
+  const remoteList = new RemoteList(urlGithub);
 
   const getFolders = async () => {
-    const data = await remoteList.getListOfFolders(
-      'https://github.com/celerik/celerik-scaffolder-templates.git'
-    );
+    const data = await remoteList.getListOfFolders();
     setList(data);
   };
 
@@ -33,7 +34,12 @@ const TemplateList = () => {
       </Paper>
       <List sx={styles.list}>
         {list.map((folder) => (
-          <ListItem key={folder.name} nameFolder={folder.name} link={folder.html_url} />
+          <ListItem
+            functionSelect={() => remoteList.getConfigFile(folder.name)}
+            key={folder.name}
+            nameFolder={folder.name}
+            link={folder.html_url}
+          />
         ))}
       </List>
     </>
