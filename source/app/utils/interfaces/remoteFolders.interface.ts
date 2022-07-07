@@ -5,7 +5,7 @@ interface ILinks {
 }
 
 export interface IFolder {
-  name?: string;
+  name: string;
   path?: string;
   sha?: string;
   size?: number;

@@ -12,7 +12,7 @@ import styles from './styles';
 
 export interface Props {
   nameFolder: string;
-  functionSelect: () => {};
+  functionSelect: () => void;
   link: string | undefined;
 }
 
