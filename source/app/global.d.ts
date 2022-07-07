@@ -10,3 +10,5 @@ type VSCode = {
 declare const vscode: VSCode;
 
 declare const prevState: string;
+
+declare const localTemplates: string;

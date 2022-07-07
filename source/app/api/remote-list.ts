@@ -34,12 +34,12 @@ export class RemoteList {
     try {
       const result = await axios.get(this.getUrlRepo());
       return result.data.filter((item: IFolder) => item.type === 'dir');
-    } catch (error) {
+    } catch (error: any) {
       vscode.postMessage<ErrorMessage>({
         type: 'ERROR',
-        payload: error as string
+        payload: error.message
       });
-      throw error;
+      return [];
     }
   }
 
