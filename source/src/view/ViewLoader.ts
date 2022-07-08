@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as Mustache from 'mustache';
 import { Message, CommonMessage, StateMessage } from './messages/messageTypes';
 
 export class ViewLoader {
@@ -112,6 +113,10 @@ export class ViewLoader {
 
   onCreateDir(data: any) {
     try {
+      const values = {
+        'component-name': 'TestComponent',
+        name: 'test-component'
+      };
       if (!vscode.workspace.workspaceFolders) throw new Error();
       const localPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}\\Scaffolding\\${data.folder}`;
       const contentPaths = this.walk(localPath).map((innerPath: string) => {
@@ -122,9 +127,10 @@ export class ViewLoader {
         };
       });
       contentPaths.forEach((el) => {
-        this.ensureDirectoryExistence(el.path);
+        const newPath = Mustache.render(el.path, values);
+        this.ensureDirectoryExistence(newPath);
         const contentFile = fs.readFileSync(el.relativePath, 'utf8');
-        fs.writeFileSync(el.path, contentFile);
+        fs.writeFileSync(newPath, Mustache.render(contentFile, values));
       });
     } catch (error) {
       console.log(error, 'error');
