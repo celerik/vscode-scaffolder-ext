@@ -1,3 +1,4 @@
+/* global vscode */
 // package
 import * as React from 'react';
 import Button from '@mui/material/Button';
@@ -15,29 +16,38 @@ export interface Props {
   link: string | undefined;
 }
 
-const RowItemTemplate = ({ nameFolder, link }: Props) => (
-  <>
-    <ListItem>
-      <Grid container>
-        <Grid xs={7} md={9} item container alignItems="center">
-          <Typography variant="body1" sx={styles.textFolder}>{nameFolder}</Typography>
+const RowItemTemplate = ({ nameFolder, link }: Props) => {
+  const onTestMessage = () => {
+    vscode.postMessage({
+      type: 'SCAFFOLDING',
+      payload: { folder: nameFolder }
+    });
+  };
+
+  return (
+    <>
+      <ListItem>
+        <Grid container>
+          <Grid xs={7} md={9} item container alignItems="center">
+            <Typography variant="body1" sx={styles.textFolder}>{nameFolder}</Typography>
+          </Grid>
+          <Grid xs={3} md={2} item container alignItems="center">
+            {link && (
+              <Link href={link} sx={{ fontSize: '12px' }} underline="always">
+                Open in Github
+              </Link>
+            )}
+          </Grid>
+          <Grid xs={2} md={1} item>
+            <Button variant="text" onClick={onTestMessage} sx={styles.buttonSelect}>
+              select
+            </Button>
+          </Grid>
         </Grid>
-        <Grid xs={3} md={2} item container alignItems="center">
-          {link && (
-            <Link href={link} sx={{ fontSize: '12px' }} underline="always">
-              Open in Github
-            </Link>
-          )}
-        </Grid>
-        <Grid xs={2} md={1} item>
-          <Button variant="text" sx={styles.buttonSelect}>
-            select
-          </Button>
-        </Grid>
-      </Grid>
-    </ListItem>
-    <Divider />
-  </>
-);
+      </ListItem>
+      <Divider />
+    </>
+  );
+};
 
 export default RowItemTemplate;
