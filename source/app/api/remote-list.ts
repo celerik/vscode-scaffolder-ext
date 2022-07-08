@@ -11,16 +11,25 @@ import { IFolder } from '../utils/interfaces/remoteFolders.interface';
 export class RemoteList {
   async getConfigFile(urlRepo:string, nameFolder: any): Promise<Array<string>> {
     try {
-      const urlgitHub = `${this.getUrlRepo(urlRepo)}/${nameFolder}/config.json`;
-      const infoFile = await axios.get(urlgitHub);
-      const request = await axios.get(infoFile.data.download_url);
+      const infoFile = await this.getFile(urlRepo, nameFolder, 'config.json');
+      const request = await axios.get(infoFile.download_url || '');
       return request.data.variables;
-    } catch (error) {
+    } catch (error: any) {
       vscode.postMessage<ErrorMessage>({
         type: 'ERROR',
-        payload: error as string
+        payload: error.message as string
       });
-      throw error;
+      return [];
+    }
+  }
+
+  async getFile(urlRepo:string, pathFile: string, fileName: string): Promise<IFolder> {
+    try {
+      const urlgitHub = `${this.getUrlRepo(urlRepo)}/${pathFile}/${fileName}`;
+      const infoFile = await axios.get(urlgitHub);
+      return infoFile.data;
+    } catch (error: any) {
+      throw new Error(`The file ${fileName} was not found`);
     }
   }
 

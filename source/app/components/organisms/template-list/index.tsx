@@ -28,11 +28,13 @@ const TemplateList = ({ title, data }: Props) => {
   const handleModalValue = (state: boolean) => setIsModalOpen(state);
 
   const getFileConfigSelected = async (folderName: string) => {
-    handleModalValue(true);
     const configFile = await
     remoteList.getConfigFile(globalStateFromExtension.templateUrl, folderName);
-    setDataConfig(configFile);
-    setfolderSelected(folderName);
+    if (configFile.length) {
+      handleModalValue(true);
+      setDataConfig(configFile);
+      setfolderSelected(folderName);
+    }
   };
   const handleSubmitData = (fields: {}) => {
     console.log('this is the data', fields);

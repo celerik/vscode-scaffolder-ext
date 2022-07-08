@@ -26,10 +26,11 @@ const ModalSelect = ({
   handleDialogValue, value, title, data, handleSubmitData
 }: Props) => {
   const {
-    register, handleSubmit, formState: { errors }
+    register, handleSubmit, reset, formState: { errors }
   } = useForm();
 
   const handleCloseDialog = () => {
+    reset();
     handleDialogValue(false);
   };
   return (
