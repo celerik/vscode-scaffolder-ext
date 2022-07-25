@@ -1,5 +1,4 @@
 /* global vscode */
-
 // Package
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
@@ -38,12 +37,14 @@ const TemplateList = ({ title, data }: Props) => {
       setFolderSelected(folderName);
     }
   };
+
   const handleSubmitData = (fields: {}) => {
     vscode.postMessage({
       type: 'SCAFFOLDING',
       payload: { folder: folderSelected, fields, isLocal: false }
     });
   };
+
   return (
     <>
       <ModalSelect
