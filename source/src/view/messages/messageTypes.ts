@@ -10,6 +10,11 @@ export interface CommonMessage extends Message {
   payload: string;
 }
 
+export interface FilesMessage extends Message {
+  type: 'COMMON';
+  payload: Record<string, string>;
+}
+
 export interface StateMessage extends Message {
   type: 'STATE';
   payload: Object;

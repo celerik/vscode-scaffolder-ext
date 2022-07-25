@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* global vscode */
 // @packages
 import axios from 'axios';
@@ -37,6 +38,38 @@ export class RemoteList {
     try {
       const result = await axios.get(this.getUrlRepo(urlRepo));
       return result.data.filter((item: IFolder) => item.type === 'dir');
+    } catch (error: any) {
+      vscode.postMessage<ErrorMessage>({
+        type: 'ERROR',
+        payload: error.message
+      });
+      return [];
+    }
+  }
+
+  async walk(dir: string) {
+    let results: Record<string, string>[] = [];
+    const list = await axios.get(dir);
+    for await (const file of list.data) {
+      if (file.type === 'dir') {
+        /* Recurse into a directory */
+        results = results.concat(await this.walk(`${dir}\\${file.name}`));
+      } else {
+        /* Is a file */
+        results.push({ downloadUrl: file.download_url, path: file.path });
+      }
+    }
+    return results;
+  }
+
+  async getTreeFolders(urlRepo:string, customUri: string): Promise<Array<IFolder>> {
+    try {
+      const result = await this.walk(`${this.getUrlRepo(urlRepo)}/${customUri}`);
+      const resultsInfo: any[] = [];
+      result.forEach((element) => {
+        resultsInfo.push(axios.get(element.downloadUrl));
+      });
+      return await Promise.all(resultsInfo);
     } catch (error: any) {
       vscode.postMessage<ErrorMessage>({
         type: 'ERROR',

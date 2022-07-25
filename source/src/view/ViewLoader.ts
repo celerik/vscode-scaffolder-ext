@@ -2,7 +2,9 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as Mustache from 'mustache';
-import { Message, CommonMessage, StateMessage } from './messages/messageTypes';
+import {
+  Message, CommonMessage, StateMessage, FilesMessage
+} from './messages/messageTypes';
 
 export class ViewLoader {
   public static currentPanel?: vscode.WebviewPanel;
@@ -63,8 +65,10 @@ export class ViewLoader {
             break;
           }
           case 'SCAFFOLDING': {
-            const data = (message as CommonMessage).payload;
-            this.onCreateDir(data);
+            const data = (message as FilesMessage).payload;
+            if (data.isLocal) {
+              this.onCreateDir(data);
+            }
             break;
           }
           default:
