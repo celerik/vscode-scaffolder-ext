@@ -33,3 +33,13 @@ Once you have the repo cloned you have to follow these steps:
 ### Project Scripts
 
 - `npm run lint`: This command checks the code and fixes problems in your code
+
+### Local Scripts
+
+To avoid Git converting from LF to CRLF, run the following commands:
+```shell
+git config --global core.autocrlf false
+git config --global core.eol lf
+git rm --cached -r .
+git reset --hard
+```
