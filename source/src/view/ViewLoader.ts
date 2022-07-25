@@ -128,6 +128,10 @@ export class ViewLoader {
       });
       contentPaths.forEach((el) => {
         const newPath = Mustache.render(el.path, values);
+        if (fs.existsSync(newPath)) {
+          vscode.window.showErrorMessage(`Currently there is a file with the path ${el.relativePath}; that is why the operation has been cancelled.`);
+          throw new Error();
+        }
         this.ensureDirectoryExistence(newPath);
         const contentFile = fs.readFileSync(el.relativePath, 'utf8');
         fs.writeFileSync(newPath, Mustache.render(contentFile, values));
