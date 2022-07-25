@@ -1,4 +1,4 @@
-export type MessageType = 'RELOAD' | 'COMMON' | 'ERROR' | 'STATE';
+export type MessageType = 'RELOAD' | 'COMMON' | 'ERROR' | 'STATE' | 'SCAFFOLDING-GET-FILE';
 
 export interface Message {
   type: MessageType;
