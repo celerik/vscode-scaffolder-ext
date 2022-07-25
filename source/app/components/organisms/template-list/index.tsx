@@ -15,11 +15,12 @@ import { GlobalStateContext } from '../../../context/MessageContext';
 import ModalSelect from '../../molecules/modal-select';
 
 interface Props {
-  title: string;
   data: IFolder[];
+  isLocal?: boolean;
+  title: string;
 }
 
-const TemplateList = ({ title, data }: Props) => {
+const TemplateList = ({ title, data, isLocal }: Props) => {
   const { globalStateFromExtension } = useContext(GlobalStateContext);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -41,7 +42,7 @@ const TemplateList = ({ title, data }: Props) => {
   const handleSubmitData = (fields: {}) => {
     vscode.postMessage({
       type: 'SCAFFOLDING',
-      payload: { folder: folderSelected, fields, isLocal: false }
+      payload: { folder: folderSelected, fields, isLocal }
     });
   };
 
@@ -79,6 +80,10 @@ const TemplateList = ({ title, data }: Props) => {
       </Grid>
     </>
   );
+};
+
+TemplateList.defaultProps = {
+  isLocal: false
 };
 
 export default TemplateList;
