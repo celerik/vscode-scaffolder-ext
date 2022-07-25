@@ -1,3 +1,4 @@
+/* global vscode */
 // Package
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
@@ -14,31 +15,37 @@ import { GlobalStateContext } from '../../../context/MessageContext';
 import ModalSelect from '../../molecules/modal-select';
 
 interface Props {
-  title: string;
   data: IFolder[];
+  isLocal?: boolean;
+  title: string;
 }
 
-const TemplateList = ({ title, data }: Props) => {
+const TemplateList = ({ title, data, isLocal }: Props) => {
   const { globalStateFromExtension } = useContext(GlobalStateContext);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [dataConfig, setDataConfig] = useState<Array<string>>([]);
-  const [folderSelected, setfolderSelected] = useState<string>('');
+  const [folderSelected, setFolderSelected] = useState<string>('');
 
   const handleModalValue = (state: boolean) => setIsModalOpen(state);
 
   const getFileConfigSelected = async (folderName: string) => {
-    const configFile = await
-    remoteList.getConfigFile(globalStateFromExtension.templateUrl, folderName);
+    const configFile = await remoteList
+      .getConfigFile(globalStateFromExtension.templateUrl, folderName);
     if (configFile.length) {
       handleModalValue(true);
       setDataConfig(configFile);
-      setfolderSelected(folderName);
+      setFolderSelected(folderName);
     }
   };
+
   const handleSubmitData = (fields: {}) => {
-    console.log('this is the data', fields);
+    vscode.postMessage({
+      type: 'SCAFFOLDING',
+      payload: { folder: folderSelected, fields, isLocal }
+    });
   };
+
   return (
     <>
       <ModalSelect
@@ -73,6 +80,10 @@ const TemplateList = ({ title, data }: Props) => {
       </Grid>
     </>
   );
+};
+
+TemplateList.defaultProps = {
+  isLocal: false
 };
 
 export default TemplateList;
