@@ -76,6 +76,7 @@ export class ViewLoader {
                 this.validateFolder(newPath);
                 fs.writeFileSync(newPath, Mustache.render(el.content, data.fields));
               });
+              vscode.window.showInformationMessage('Scaffolding completed successfully.');
             }
             break;
           }
@@ -155,6 +156,7 @@ export class ViewLoader {
           const contentFile = fs.readFileSync(el.relativePath, 'utf8');
           fs.writeFileSync(newPath, Mustache.render(contentFile, values));
         });
+      vscode.window.showInformationMessage('Scaffolding completed successfully.');
     } catch (error) {
       console.log(error, 'error');
     }
