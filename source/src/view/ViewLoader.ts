@@ -155,12 +155,14 @@ export class ViewLoader {
           relativePath: innerPath
         };
       });
-      contentPaths.forEach((el) => {
-        const newPath = Mustache.render(el.path, values);
-        this.validateFolder(newPath);
-        const contentFile = fs.readFileSync(el.relativePath, 'utf8');
-        fs.writeFileSync(newPath, Mustache.render(contentFile, values));
-      });
+      contentPaths
+        .filter((element) => element.relativePath !== `${localPath}\\config.json`)
+        .forEach((el) => {
+          const newPath = Mustache.render(el.path, values);
+          this.validateFolder(newPath);
+          const contentFile = fs.readFileSync(el.relativePath, 'utf8');
+          fs.writeFileSync(newPath, Mustache.render(contentFile, values));
+        });
     } catch (error) {
       console.log(error, 'error');
     }
