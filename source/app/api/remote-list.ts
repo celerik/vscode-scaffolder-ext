@@ -7,7 +7,7 @@ import axios from 'axios';
 import { API_URL_GITHUB } from './index';
 import { ErrorMessage } from '../../src/view/messages/messageTypes';
 import { GIT_URL } from '../utils/regex';
-import { IFolder } from '../utils/interfaces/remoteFolders.interface';
+import { IFolder, IResult, IResultInfo } from '../utils/interfaces/remoteFolders.interface';
 
 export class RemoteList {
   async getConfigFile(urlRepo:string, nameFolder: any): Promise<Array<string>> {
@@ -48,34 +48,33 @@ export class RemoteList {
   }
 
   async walk(dir: string) {
-    let results: Record<string, string>[] = [];
+    let results: IResult[] = [];
     const list = await axios.get(dir);
     for await (const file of list.data) {
       if (file.type === 'dir') {
-        /* Recurse into a directory */
         results = results.concat(await this.walk(`${dir}\\${file.name}`));
       } else {
-        /* Is a file */
         results.push({ downloadUrl: file.download_url, path: file.path });
       }
     }
     return results;
   }
 
-  async getTreeFolders(urlRepo:string, customUri: string): Promise<Array<IFolder>> {
+  async getTreeFolders(urlRepo:string, customUri: string): Promise<Array<IResultInfo>> {
     try {
-      const result = await this.walk(`${this.getUrlRepo(urlRepo)}/${customUri}`);
-      const resultsInfo: any[] = [];
-      result.forEach((element) => {
-        resultsInfo.push(axios.get(element.downloadUrl));
-      });
-      return await Promise.all(resultsInfo);
+      const results = await this.walk(`${this.getUrlRepo(urlRepo)}/${customUri}`);
+      const resultsInfo: IResultInfo[] = [];
+      for await (const result of results) {
+        const contentFile = await axios.get(result.downloadUrl);
+        resultsInfo.push({ path: result.path, content: contentFile.data });
+      }
+      return resultsInfo.filter((item) => typeof item.content === 'string');
     } catch (error: any) {
       vscode.postMessage<ErrorMessage>({
         type: 'ERROR',
         payload: error.message
       });
-      return [];
+      throw error;
     }
   }
 

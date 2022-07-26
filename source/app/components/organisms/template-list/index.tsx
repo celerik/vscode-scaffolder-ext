@@ -40,11 +40,13 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
   };
 
   const handleSubmitData = async (fields: {}) => {
-    const getRemoteFiles = await remoteList
+    const remoteFiles = await remoteList
       .getTreeFolders(globalStateFromExtension.templateUrl, folderSelected);
     vscode.postMessage({
       type: 'SCAFFOLDING',
-      payload: { folder: folderSelected, fields, isLocal }
+      payload: {
+        folder: folderSelected, fields, isLocal, data: remoteFiles
+      }
     });
   };
 

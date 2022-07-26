@@ -68,6 +68,18 @@ export class ViewLoader {
             const data = (message as FilesMessage).payload;
             if (data.isLocal) {
               this.onCreateDir(data);
+            } else {
+              data.data.forEach((el) => {
+                const values = {
+                  'component-name': 'RemoteTest',
+                  name: 'test-remote-component'
+                };
+                const [, pathFolder] = el.path.split(data.folder);
+                if (!vscode.workspace.workspaceFolders) throw new Error();
+                const newPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}${Mustache.render(pathFolder, values)}`;
+                this.validateFolder(newPath);
+                fs.writeFileSync(newPath, Mustache.render(el.content, values));
+              });
             }
             break;
           }
@@ -115,6 +127,14 @@ export class ViewLoader {
     return false;
   }
 
+  validateFolder(newPath: string) {
+    if (fs.existsSync(newPath)) {
+      vscode.window.showErrorMessage(`Currently there is a file with the path ${newPath}; that is why the operation has been cancelled.`);
+      throw new Error();
+    }
+    this.ensureDirectoryExistence(newPath);
+  }
+
   onCreateDir(data: any) {
     try {
       const values = {
@@ -132,11 +152,7 @@ export class ViewLoader {
       });
       contentPaths.forEach((el) => {
         const newPath = Mustache.render(el.path, values);
-        if (fs.existsSync(newPath)) {
-          vscode.window.showErrorMessage(`Currently there is a file with the path ${el.relativePath}; that is why the operation has been cancelled.`);
-          throw new Error();
-        }
-        this.ensureDirectoryExistence(newPath);
+        this.validateFolder(newPath);
         const contentFile = fs.readFileSync(el.relativePath, 'utf8');
         fs.writeFileSync(newPath, Mustache.render(contentFile, values));
       });

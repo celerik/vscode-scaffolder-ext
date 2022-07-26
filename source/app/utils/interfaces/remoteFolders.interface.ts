@@ -16,3 +16,12 @@ export interface IFolder {
   type?: string;
   _links?: ILinks;
 }
+
+export interface IResult {
+  downloadUrl: string;
+  path: string;
+}
+export interface IResultInfo {
+  content: any;
+  path: string;
+}
