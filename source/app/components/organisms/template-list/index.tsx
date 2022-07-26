@@ -2,17 +2,18 @@
 // Package
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 
 // Scripts
 import ListItem from '../../molecules/row-item-template';
-import styles from './styles';
-import { IFolder } from '../../../utils/interfaces/remoteFolders.interface';
-import { remoteList } from '../../../api/remote-list';
-import { GlobalStateContext } from '../../../context/MessageContext';
 import ModalSelect from '../../molecules/modal-select';
+import styles from './styles';
+import { GlobalStateContext } from '../../../context/MessageContext';
+import { IFolder } from '../../../utils/interfaces/remoteFolders.interface';
+import { localList } from '../../../api/local-list';
+import { remoteList } from '../../../api/remote-list';
 
 interface Props {
   data: IFolder[];
@@ -30,12 +31,16 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
   const handleModalValue = (state: boolean) => setIsModalOpen(state);
 
   const getFileConfigSelected = async (folderName: string) => {
-    const configFile = await remoteList
-      .getConfigFile(globalStateFromExtension.templateUrl, folderName);
-    if (configFile.length) {
-      handleModalValue(true);
-      setDataConfig(configFile);
-      setFolderSelected(folderName);
+    setFolderSelected(folderName);
+    let configFile: string[] = [];
+    if (isLocal) {
+      localList.getConfigFile(folderName);
+    } else {
+      configFile = await remoteList.getConfigFile(globalStateFromExtension.templateUrl, folderName);
+      if (configFile.length) {
+        setDataConfig(configFile);
+        handleModalValue(true);
+      }
     }
   };
 
@@ -49,6 +54,13 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
       }
     });
   };
+
+  useEffect(() => {
+    if (isLocal && globalStateFromExtension.scaffoldingFile) {
+      setDataConfig(JSON.parse(globalStateFromExtension.scaffoldingFile).variables);
+      handleModalValue(true);
+    }
+  }, [globalStateFromExtension.scaffoldingFile]);
 
   return (
     <>

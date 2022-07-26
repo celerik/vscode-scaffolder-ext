@@ -49,7 +49,7 @@ const Dashboard = () => {
       </Grid>
       <Grid sx={styles.list} item>
         <TemplateList data={remoteData} title="Remote Templates" />
-        <TemplateList data={localData} title="Local Templates" />
+        <TemplateList isLocal data={localData} title="Local Templates" />
       </Grid>
     </Grid>
   );
