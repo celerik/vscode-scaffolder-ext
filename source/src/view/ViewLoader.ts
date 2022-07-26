@@ -67,18 +67,14 @@ export class ViewLoader {
           case 'SCAFFOLDING': {
             const data = (message as FilesMessage).payload;
             if (data.isLocal) {
-              this.onCreateDir(data);
+              this.onCreateDir(data, data.fields);
             } else {
               data.data.forEach((el) => {
-                const values = {
-                  'component-name': 'RemoteTest',
-                  name: 'test-remote-component'
-                };
                 const [, pathFolder] = el.path.split(data.folder);
                 if (!vscode.workspace.workspaceFolders) throw new Error();
-                const newPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}${Mustache.render(pathFolder, values)}`;
+                const newPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}${Mustache.render(pathFolder, data.fields)}`;
                 this.validateFolder(newPath);
-                fs.writeFileSync(newPath, Mustache.render(el.content, values));
+                fs.writeFileSync(newPath, Mustache.render(el.content, data.fields));
               });
             }
             break;
@@ -140,12 +136,8 @@ export class ViewLoader {
     this.ensureDirectoryExistence(newPath);
   }
 
-  onCreateDir(data: any) {
+  onCreateDir(data: any, values: Record<string, string>) {
     try {
-      const values = {
-        'component-name': 'TestComponent',
-        name: 'test-component'
-      };
       if (!vscode.workspace.workspaceFolders) throw new Error();
       const localPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}\\Scaffolding\\${data.folder}`;
       const contentPaths = this.walk(localPath).map((innerPath: string) => {
@@ -176,10 +168,10 @@ export class ViewLoader {
         const contentFile = fs.readFileSync(localPath, 'utf8');
         ViewLoader.postMessageToWebview({ type: 'SCAFFOLDING-GET-FILE', payload: contentFile });
       } else {
-        throw new Error('The File does not exist');
+        throw new Error('The configuration file does not exist in the selected folder.');
       }
     } catch (error:any) {
-      vscode.window.showInformationMessage(error.message);
+      vscode.window.showErrorMessage(error.message);
     }
   }
 

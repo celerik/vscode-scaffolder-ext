@@ -14,6 +14,7 @@ export interface IFolder {
 export interface Data {
   data: Array<IFolder>;
   folder: string;
+  fields: Record<string, string>;
   isLocal: boolean;
 }
 
