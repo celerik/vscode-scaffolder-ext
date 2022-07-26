@@ -1,15 +1,11 @@
 /* global vscode */
-// @packages
-// import axios from 'axios';
 
-// @scripts
-
-export class RemoteList {
-  async getConfigFile() {
+export class LocalList {
+  async getConfigFile(folder: string) {
     vscode.postMessage({
-      type: 'ERROR',
-      payload: { folder: 'hola' }
+      type: 'SCAFFOLDING-GET-FILE',
+      payload: { folder, file: 'config.json' }
     });
   }
 }
-export const remoteList = new RemoteList();
+export const localList = new LocalList();

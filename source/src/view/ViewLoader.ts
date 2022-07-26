@@ -67,6 +67,11 @@ export class ViewLoader {
             this.onCreateDir(data);
             break;
           }
+          case 'SCAFFOLDING-GET-FILE': {
+            const data = (message as CommonMessage).payload;
+            this.getFile(data);
+            break;
+          }
           default:
             vscode.window.showErrorMessage('Something went wrong');
         }
@@ -138,6 +143,20 @@ export class ViewLoader {
       });
     } catch (error) {
       console.log(error, 'error');
+    }
+  }
+
+  getFile(data: any) {
+    try {
+      if (!vscode.workspace.workspaceFolders) throw new Error('The workspace that is not opened');
+      const localPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}\\Scaffolding\\${data.folder}\\${data.file}`;
+      if (fs.existsSync(localPath)) {
+        const contentFile = fs.readFileSync(localPath, 'utf8');
+        ViewLoader.postMessageToWebview({ type: 'SCAFFOLDING-GET-FILE', payload: contentFile });
+      }
+      throw new Error('The File does not exist');
+    } catch (error:any) {
+      vscode.window.showInformationMessage(error.message);
     }
   }
 

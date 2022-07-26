@@ -1,18 +1,18 @@
-// package
-import React from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import DialogContent from '@mui/material/DialogContent';
-import TextField from '@mui/material/TextField';
-import { useForm } from 'react-hook-form';
+// @package
 import Button from '@mui/material/Button';
+import CloseIcon from '@mui/icons-material/Close';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import React, { useContext } from 'react';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import { useForm } from 'react-hook-form';
 
+// @scripts
+import { GlobalStateContext } from '../../../context/MessageContext';
 import styles from './styles';
-
-// types
 
 interface Props {
   handleDialogValue: (state: boolean) => void;
@@ -25,6 +25,8 @@ interface Props {
 const ModalSelect = ({
   handleDialogValue, value, title, data, handleSubmitData
 }: Props) => {
+  const { globalStateFromExtension } = useContext(GlobalStateContext);
+
   const {
     register, handleSubmit, reset, formState: { errors }
   } = useForm();
@@ -32,7 +34,9 @@ const ModalSelect = ({
   const handleCloseDialog = () => {
     reset();
     handleDialogValue(false);
+    globalStateFromExtension.scaffoldingFile = '';
   };
+
   return (
     <Dialog open={value} disableEscapeKeyDown fullWidth sx={{ borderRadius: 0 }} maxWidth="sm">
       <DialogTitle sx={styles.titleContainer} component="div">
