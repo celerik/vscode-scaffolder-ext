@@ -25,7 +25,7 @@ interface Props {
 const ModalSelect = ({
   handleDialogValue, value, title, data, handleSubmitData
 }: Props) => {
-  const { globalStateFromExtension } = useContext(GlobalStateContext);
+  const { handleStateFromApp } = useContext(GlobalStateContext);
 
   const {
     register, handleSubmit, reset, formState: { errors }
@@ -34,7 +34,7 @@ const ModalSelect = ({
   const handleCloseDialog = () => {
     reset();
     handleDialogValue(false);
-    globalStateFromExtension.scaffoldingFile = '';
+    handleStateFromApp('scaffoldingFile', '', false);
   };
 
   return (
@@ -52,7 +52,7 @@ const ModalSelect = ({
           {data.map((item) => (
             <React.Fragment key={item}>
               <Typography gutterBottom sx={{ color: 'text.secondary' }} variant="body1">
-                {item}
+                { `{{${item}}}`}
               </Typography>
               <TextField
                 id="outlined-basic"

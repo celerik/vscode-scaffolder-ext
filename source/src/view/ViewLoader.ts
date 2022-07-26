@@ -175,8 +175,9 @@ export class ViewLoader {
       if (fs.existsSync(localPath)) {
         const contentFile = fs.readFileSync(localPath, 'utf8');
         ViewLoader.postMessageToWebview({ type: 'SCAFFOLDING-GET-FILE', payload: contentFile });
+      } else {
+        throw new Error('The File does not exist');
       }
-      throw new Error('The File does not exist');
     } catch (error:any) {
       vscode.window.showInformationMessage(error.message);
     }
