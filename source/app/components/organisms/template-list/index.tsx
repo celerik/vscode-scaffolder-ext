@@ -22,7 +22,7 @@ interface Props {
 }
 
 const TemplateList = ({ title, data, isLocal }: Props) => {
-  const { handleStateFromApp, globalStateFromExtension } = useContext(GlobalStateContext);
+  const { globalStateFromExtension } = useContext(GlobalStateContext);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [dataConfig, setDataConfig] = useState<Array<string>>([]);
@@ -49,8 +49,6 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
       type: 'SCAFFOLDING',
       payload: { folder: folderSelected, fields, isLocal }
     });
-    handleModalValue(false);
-    handleStateFromApp('scaffoldingFile', '', false);
   };
 
   const dataConfigFormated = (configArray: string[]) => configArray.map((item) => (item.replaceAll('{', '').replaceAll('}', '')));

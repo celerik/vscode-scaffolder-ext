@@ -37,6 +37,11 @@ const ModalSelect = ({
     handleStateFromApp('scaffoldingFile', '', false);
   };
 
+  const onClickSubmit = (fields: any) => {
+    handleSubmitData(fields);
+    handleCloseDialog();
+  }
+
   return (
     <Dialog open={value} disableEscapeKeyDown fullWidth sx={{ borderRadius: 0 }} maxWidth="sm">
       <DialogTitle sx={styles.titleContainer} component="div">
@@ -48,7 +53,7 @@ const ModalSelect = ({
         </IconButton>
       </DialogTitle>
       <DialogContent dividers sx={styles.content}>
-        <form onSubmit={handleSubmit(handleSubmitData)} style={{ display: 'contents' }}>
+        <form onSubmit={handleSubmit(onClickSubmit)} style={{ display: 'contents' }}>
           {data.map((item) => (
             <React.Fragment key={item}>
               <Typography gutterBottom sx={{ color: 'text.secondary' }} variant="body1">
