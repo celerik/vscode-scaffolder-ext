@@ -49,7 +49,10 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
       type: 'SCAFFOLDING',
       payload: { folder: folderSelected, fields, isLocal }
     });
+    handleModalValue(false);
   };
+
+  const dataConfigFormated = (configArray: string[]) => configArray.map((item) => (item.replaceAll('{', '').replaceAll('}', '')));
 
   useEffect(() => {
     if (isLocal && globalStateFromExtension.scaffoldingFile) {
@@ -64,7 +67,7 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
         handleDialogValue={handleModalValue}
         value={isModalOpen}
         title={folderSelected}
-        data={dataConfig}
+        data={dataConfigFormated(dataConfig)}
         handleSubmitData={handleSubmitData}
       />
       <Grid item sx={{ mb: 3 }}>

@@ -41,12 +41,14 @@ export const App = () => {
     [globalStateFromExtension]
   );
 
-  const handleStateFromApp = (property: string, value: string) => {
+  const handleStateFromApp = (property: string, value: string, isPersistent = true) => {
     const data = { ...globalStateFromExtension, [property]: value };
-    vscode.postMessage<StateMessage>({
-      type: 'STATE',
-      payload: { ...data }
-    });
+    if (isPersistent) {
+      vscode.postMessage<StateMessage>({
+        type: 'STATE',
+        payload: { ...data }
+      });
+    }
     setGlobalStateFromExtension({ ...data });
   };
 
