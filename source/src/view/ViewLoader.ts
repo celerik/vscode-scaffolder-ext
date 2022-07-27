@@ -2,7 +2,9 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as Mustache from 'mustache';
-import { Message, CommonMessage, StateMessage } from './messages/messageTypes';
+import {
+  Message, CommonMessage, StateMessage, FilesMessage
+} from './messages/messageTypes';
 
 export class ViewLoader {
   public static currentPanel?: vscode.WebviewPanel;
@@ -63,8 +65,21 @@ export class ViewLoader {
             break;
           }
           case 'SCAFFOLDING': {
-            const data = (message as CommonMessage).payload;
-            this.onCreateDir(data);
+            const data = (message as FilesMessage).payload;
+            if (data.isLocal) {
+              this.onCreateDir(data, data.fields);
+            } else {
+              data.data.forEach((el) => {
+                const [, pathFolder] = el.path.split(data.folder);
+                if (!vscode.workspace.workspaceFolders) throw new Error();
+                const newPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}${Mustache.render(pathFolder, data.fields)}`;
+                const fileExists = this.thereIsAFile(newPath);
+                if (!fileExists) {
+                  fs.writeFileSync(newPath, Mustache.render(el.content, data.fields));
+                }
+              });
+              vscode.window.showInformationMessage('Scaffolding completed successfully.');
+            }
             break;
           }
           case 'SCAFFOLDING-GET-FILE': {
@@ -116,12 +131,17 @@ export class ViewLoader {
     return false;
   }
 
-  onCreateDir(data: any) {
+  thereIsAFile(newPath: string) {
+    if (fs.existsSync(newPath)) {
+      vscode.window.showErrorMessage(`Currently there is a file with the path ${newPath}; that is why this file was not created.`);
+      return true;
+    }
+    this.ensureDirectoryExistence(newPath);
+    return false;
+  }
+
+  onCreateDir(data: any, values: Record<string, string>) {
     try {
-      const values = {
-        'component-name': 'TestComponent',
-        name: 'test-component'
-      };
       if (!vscode.workspace.workspaceFolders) throw new Error();
       const localPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}\\Scaffolding\\${data.folder}`;
       const contentPaths = this.walk(localPath).map((innerPath: string) => {
@@ -131,16 +151,17 @@ export class ViewLoader {
           relativePath: innerPath
         };
       });
-      contentPaths.forEach((el) => {
-        const newPath = Mustache.render(el.path, values);
-        if (fs.existsSync(newPath)) {
-          vscode.window.showErrorMessage(`Currently there is a file with the path ${el.relativePath}; that is why the operation has been cancelled.`);
-          throw new Error();
-        }
-        this.ensureDirectoryExistence(newPath);
-        const contentFile = fs.readFileSync(el.relativePath, 'utf8');
-        fs.writeFileSync(newPath, Mustache.render(contentFile, values));
-      });
+      contentPaths
+        .filter((element) => element.relativePath !== `${localPath}\\config.json`)
+        .forEach((el) => {
+          const newPath = Mustache.render(el.path, values);
+          const fileExists = this.thereIsAFile(newPath);
+          if (!fileExists) {
+            const contentFile = fs.readFileSync(el.relativePath, 'utf8');
+            fs.writeFileSync(newPath, Mustache.render(contentFile, values));
+          }
+        });
+      vscode.window.showInformationMessage('Scaffolding completed successfully.');
     } catch (error) {
       console.log(error, 'error');
     }
@@ -154,10 +175,10 @@ export class ViewLoader {
         const contentFile = fs.readFileSync(localPath, 'utf8');
         ViewLoader.postMessageToWebview({ type: 'SCAFFOLDING-GET-FILE', payload: contentFile });
       } else {
-        throw new Error('The File does not exist');
+        throw new Error('The configuration file does not exist in the selected folder.');
       }
     } catch (error:any) {
-      vscode.window.showInformationMessage(error.message);
+      vscode.window.showErrorMessage(error.message);
     }
   }
 

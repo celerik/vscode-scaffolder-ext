@@ -5,9 +5,27 @@ export interface Message {
   payload?: any;
 }
 
+export interface IFolder {
+  folder: string;
+  path: string;
+  content: string;
+}
+
+export interface Data {
+  data: Array<IFolder>;
+  folder: string;
+  fields: Record<string, string>;
+  isLocal: boolean;
+}
+
 export interface CommonMessage extends Message {
   type: 'COMMON';
   payload: string;
+}
+
+export interface FilesMessage extends Message {
+  type: 'COMMON';
+  payload: Data;
 }
 
 export interface StateMessage extends Message {
