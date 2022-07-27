@@ -17,6 +17,8 @@ To create files with our extension is necessary:
 - Click on generate
 - The files will be created following the path found inside the template, that is why it is important that each template has the folder structure where we want them to be created, for example src/components
 
+ ![Demo](images/working.gif)
+
 ## Settings
 
 ### Local
