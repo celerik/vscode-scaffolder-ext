@@ -3,17 +3,17 @@ import { Theme } from '@mui/material';
 export default {
   content: { display: 'flex', flexDirection: 'column' },
   saveButton: {
+    alignSelf: 'end',
     mt: 2,
-    width: '25%',
-    alignSelf: 'end'
+    width: '25%'
   },
   titleContainer: { m: 0, pl: 2 },
   title: { color: 'white', m: 0, fontWeight: 500 },
   iconButton: {
+    color: (theme: Theme) => theme.palette.grey[500],
     position: 'absolute',
     right: 3,
-    top: 1,
-    color: (theme: Theme) => theme.palette.grey[500]
+    top: 1
   },
   input: {
     '& .MuiOutlinedInput-root.Mui-focused': {
