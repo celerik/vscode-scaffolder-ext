@@ -11,8 +11,8 @@ import Typography from '@mui/material/Typography';
 import { useForm } from 'react-hook-form';
 
 // @scripts
-import { GlobalStateContext } from '../../../context/MessageContext';
 import styles from './styles';
+import { GlobalStateContext } from '../../../context/MessageContext';
 
 interface Props {
   handleDialogValue: (state: boolean) => void;
@@ -60,11 +60,11 @@ const ModalSelect = ({
                 { `{{${item}}}`}
               </Typography>
               <TextField
-                id="outlined-basic"
-                sx={styles.input}
-                size="small"
                 error={Boolean(errors[item])}
                 helperText={errors[item]?.message as string}
+                id="outlined-basic"
+                size="small"
+                sx={styles.input}
                 variant="outlined"
                 {...register(item, {
                   required: true

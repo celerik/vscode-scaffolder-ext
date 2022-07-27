@@ -1,10 +1,10 @@
 /* global vscode */
 // Package
+import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
 import React, { useState, useContext, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
 
 // Scripts
 import ListItem from '../../molecules/row-item-template';
@@ -24,9 +24,9 @@ interface Props {
 const TemplateList = ({ title, data, isLocal }: Props) => {
   const { globalStateFromExtension } = useContext(GlobalStateContext);
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [dataConfig, setDataConfig] = useState<Array<string>>([]);
   const [folderSelected, setFolderSelected] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleModalValue = (state: boolean) => setIsModalOpen(state);
 
@@ -67,11 +67,11 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
   return (
     <>
       <ModalSelect
-        handleDialogValue={handleModalValue}
-        value={isModalOpen}
-        title={folderSelected}
         data={dataConfigFormated(dataConfig)}
+        handleDialogValue={handleModalValue}
         handleSubmitData={handleSubmitData}
+        title={folderSelected}
+        value={isModalOpen}
       />
       <Grid item sx={{ mb: 3 }}>
         <Paper sx={styles.paper} elevation={0}>
@@ -82,12 +82,12 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
         <List sx={styles.list}>
           {data.length ? data.map((folder) => (
             <ListItem
+              key={(folder.name || folder) as React.Key}
+              link={folder.html_url}
+              nameFolder={(folder.name || folder) as string}
               functionSelect={
                 () => getFileConfigSelected(folder.name)
               }
-              key={(folder.name || folder) as React.Key}
-              nameFolder={(folder.name || folder) as string}
-              link={folder.html_url}
             />
           )) : (
             <Typography variant="h5" sx={styles.noResourceLabel}>
