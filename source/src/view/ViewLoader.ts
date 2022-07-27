@@ -73,8 +73,10 @@ export class ViewLoader {
                 const [, pathFolder] = el.path.split(data.folder);
                 if (!vscode.workspace.workspaceFolders) throw new Error();
                 const newPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}${Mustache.render(pathFolder, data.fields)}`;
-                this.validateFolder(newPath);
-                fs.writeFileSync(newPath, Mustache.render(el.content, data.fields));
+                const fileExists = this.thereIsAFile(newPath);
+                if (!fileExists) {
+                  fs.writeFileSync(newPath, Mustache.render(el.content, data.fields));
+                }
               });
               vscode.window.showInformationMessage('Scaffolding completed successfully.');
             }
@@ -129,12 +131,13 @@ export class ViewLoader {
     return false;
   }
 
-  validateFolder(newPath: string) {
+  thereIsAFile(newPath: string) {
     if (fs.existsSync(newPath)) {
-      vscode.window.showErrorMessage(`Currently there is a file with the path ${newPath}; that is why the operation has been cancelled.`);
-      throw new Error();
+      vscode.window.showErrorMessage(`Currently there is a file with the path ${newPath}; that is why this file was not created.`);
+      return true;
     }
     this.ensureDirectoryExistence(newPath);
+    return false;
   }
 
   onCreateDir(data: any, values: Record<string, string>) {
@@ -152,9 +155,11 @@ export class ViewLoader {
         .filter((element) => element.relativePath !== `${localPath}\\config.json`)
         .forEach((el) => {
           const newPath = Mustache.render(el.path, values);
-          this.validateFolder(newPath);
-          const contentFile = fs.readFileSync(el.relativePath, 'utf8');
-          fs.writeFileSync(newPath, Mustache.render(contentFile, values));
+          const fileExists = this.thereIsAFile(newPath);
+          if (!fileExists) {
+            const contentFile = fs.readFileSync(el.relativePath, 'utf8');
+            fs.writeFileSync(newPath, Mustache.render(contentFile, values));
+          }
         });
       vscode.window.showInformationMessage('Scaffolding completed successfully.');
     } catch (error) {
