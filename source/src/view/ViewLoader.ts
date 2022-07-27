@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as Mustache from 'mustache';
 import { Message, CommonMessage, StateMessage } from './messages/messageTypes';
 
 export class ViewLoader {
@@ -42,17 +43,37 @@ export class ViewLoader {
     // listen messages from webview
     this.panel.webview.onDidReceiveMessage(
       (message: Message) => {
-        if (message.type === 'RELOAD') {
-          vscode.commands.executeCommand('workbench.action.webview.reloadWebviewAction');
-        } else if (message.type === 'STATE') {
-          const text = (message as StateMessage).payload;
-          context.globalState.update(templateUrl, JSON.stringify(text));
-        } else if (message.type === 'COMMON') {
-          const text = (message as CommonMessage).payload;
-          vscode.window.showInformationMessage(`${text}`);
-        } else if (message.type === 'ERROR') {
-          const text = (message as CommonMessage).payload;
-          vscode.window.showErrorMessage(`${text}`);
+        switch (message.type) {
+          case 'RELOAD':
+            vscode.commands.executeCommand('workbench.action.webview.reloadWebviewAction');
+            break;
+          case 'STATE': {
+            const text = (message as StateMessage).payload;
+            context.globalState.update(templateUrl, JSON.stringify(text));
+            break;
+          }
+          case 'COMMON': {
+            const text = (message as CommonMessage).payload;
+            vscode.window.showInformationMessage(`${text}`);
+            break;
+          }
+          case 'ERROR': {
+            const text = (message as CommonMessage).payload;
+            vscode.window.showErrorMessage(`${text}`);
+            break;
+          }
+          case 'SCAFFOLDING': {
+            const data = (message as CommonMessage).payload;
+            this.onCreateDir(data);
+            break;
+          }
+          case 'SCAFFOLDING-GET-FILE': {
+            const data = (message as CommonMessage).payload;
+            this.getFile(data);
+            break;
+          }
+          default:
+            vscode.window.showErrorMessage('Something went wrong');
         }
       },
       null,
@@ -66,6 +87,78 @@ export class ViewLoader {
       null,
       this.disposables
     );
+  }
+
+  walk(dir: string) {
+    let results: string[] = [];
+    const list = fs.readdirSync(dir);
+    list.forEach((file) => {
+      const newFile = `${dir}\\${file}`;
+      const stat = fs.statSync(newFile);
+      if (stat && stat.isDirectory()) {
+        /* Recurse into a subdirectory */
+        results = results.concat(this.walk(newFile));
+      } else {
+        /* Is a file */
+        results.push(newFile);
+      }
+    });
+    return results;
+  }
+
+  ensureDirectoryExistence(filePath: string) {
+    const dirname = path.dirname(filePath);
+    if (fs.existsSync(dirname)) {
+      return true;
+    }
+    this.ensureDirectoryExistence(dirname);
+    fs.mkdirSync(dirname);
+    return false;
+  }
+
+  onCreateDir(data: any) {
+    try {
+      const values = {
+        'component-name': 'TestComponent',
+        name: 'test-component'
+      };
+      if (!vscode.workspace.workspaceFolders) throw new Error();
+      const localPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}\\Scaffolding\\${data.folder}`;
+      const contentPaths = this.walk(localPath).map((innerPath: string) => {
+        const [route, endRoute] = innerPath.split(`\\Scaffolding\\${data.folder}`);
+        return {
+          path: `${route}${endRoute}`,
+          relativePath: innerPath
+        };
+      });
+      contentPaths.forEach((el) => {
+        const newPath = Mustache.render(el.path, values);
+        if (fs.existsSync(newPath)) {
+          vscode.window.showErrorMessage(`Currently there is a file with the path ${el.relativePath}; that is why the operation has been cancelled.`);
+          throw new Error();
+        }
+        this.ensureDirectoryExistence(newPath);
+        const contentFile = fs.readFileSync(el.relativePath, 'utf8');
+        fs.writeFileSync(newPath, Mustache.render(contentFile, values));
+      });
+    } catch (error) {
+      console.log(error, 'error');
+    }
+  }
+
+  getFile(data: any) {
+    try {
+      if (!vscode.workspace.workspaceFolders) throw new Error('The workspace that is not opened');
+      const localPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}\\Scaffolding\\${data.folder}\\${data.file}`;
+      if (fs.existsSync(localPath)) {
+        const contentFile = fs.readFileSync(localPath, 'utf8');
+        ViewLoader.postMessageToWebview({ type: 'SCAFFOLDING-GET-FILE', payload: contentFile });
+      } else {
+        throw new Error('The File does not exist');
+      }
+    } catch (error:any) {
+      vscode.window.showInformationMessage(error.message);
+    }
   }
 
   private renderWebview() {
@@ -112,12 +205,15 @@ export class ViewLoader {
 
     // The global status of vs code is loaded and passed as a string to the webview.
     let prevState = this.context.globalState.get('global.state') || '';
-    let localTemplates: string[];
+    let localTemplates: Record<string, any>[];
     prevState = JSON.stringify(prevState).replace(/\\"/g, '\'');
 
     try {
       if (!vscode.workspace.workspaceFolders) throw new Error();
-      localTemplates = fs.readdirSync(`${vscode.workspace.workspaceFolders[0].uri.fsPath}\\Scaffolding`);
+      localTemplates = fs.readdirSync(`${vscode.workspace.workspaceFolders[0].uri.fsPath}\\Scaffolding`, { withFileTypes: true });
+      localTemplates = localTemplates
+        .filter((dirent: any) => dirent.isDirectory())
+        .map((dirent) => dirent.name);
     } catch (error) {
       localTemplates = [];
     }

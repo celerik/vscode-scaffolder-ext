@@ -17,20 +17,38 @@ export const App = () => {
 
   const handleStateFromExtension = useCallback(
     (event: MessageEvent<Message>) => {
-      if (event.data.type === 'COMMON') {
-        const message = event.data as CommonMessage;
-        setGlobalStateFromExtension({ ...globalStateFromExtension, message: message.payload });
+      switch (event.data.type) {
+        case 'COMMON': {
+          const message = event.data as CommonMessage;
+          setGlobalStateFromExtension({ ...globalStateFromExtension, message: message.payload });
+          break;
+        }
+        case 'SCAFFOLDING-GET-FILE': {
+          const message = event.data;
+          setGlobalStateFromExtension({
+            ...globalStateFromExtension,
+            scaffoldingFile: message.payload
+          });
+          break;
+        }
+        default:
+          vscode.postMessage({
+            type: 'ERROR',
+            payload: 'Something went wrong'
+          });
       }
     },
     [globalStateFromExtension]
   );
 
-  const handleStateFromApp = (property: string, value: string) => {
+  const handleStateFromApp = (property: string, value: string, isPersistent = true) => {
     const data = { ...globalStateFromExtension, [property]: value };
-    vscode.postMessage<StateMessage>({
-      type: 'STATE',
-      payload: { ...data }
-    });
+    if (isPersistent) {
+      vscode.postMessage<StateMessage>({
+        type: 'STATE',
+        payload: { ...data }
+      });
+    }
     setGlobalStateFromExtension({ ...data });
   };
 
