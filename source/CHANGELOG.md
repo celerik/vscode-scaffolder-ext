@@ -2,13 +2,14 @@
 
 All notable changes to the "celerik-scaffolder" extension will be documented in this file.
 
-## Version 1.0.0
+## Version 1.0.1
 
 - Release date: Julio 28, 2022
 
 ### Added
 - Refactor replacement logic to allow multiple tags
 - Add repository url to package.json
+- Fix bug related to local templates
 
 ## Version 0.0.2
 
