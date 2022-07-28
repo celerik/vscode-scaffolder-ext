@@ -3,7 +3,7 @@
   "displayName": "Celerik Scaffolder",
   "description": "Extension for VSCode that helps to automate code generation through scaffolding",
   "publisher": "CelerikScaffolding",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "icon": "images/scaffolder.png",
   "engines": {
     "vscode": "^1.68.0"
@@ -11,6 +11,10 @@
   "categories": [
     "Snippets"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/celerik/vscode-scaffolder-ext.git"
+  },
   "activationEvents": [
     "onCommand:celerik-scaffolder.open"
   ],
