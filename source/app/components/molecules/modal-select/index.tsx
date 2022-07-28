@@ -76,7 +76,7 @@ const ModalSelect = ({
         </DialogContent>
         <DialogActions disableSpacing>
           <Button variant="contained" type="submit" sx={styles.saveButton}>
-            Generatessss
+            Generates
           </Button>
         </DialogActions>
       </form>
