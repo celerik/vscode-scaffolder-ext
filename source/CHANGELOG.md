@@ -9,7 +9,7 @@ All notable changes to the "celerik-scaffolder" extension will be documented in 
 ### Added
 - Changelog file
 
-## Version 0.0.2
+## Version 0.0.1
 
 - Release date: Julio 27, 2022
 
