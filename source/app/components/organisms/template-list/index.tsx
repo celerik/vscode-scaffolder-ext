@@ -55,8 +55,6 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
     });
   };
 
-  const dataConfigFormated = (configArray: string[]) => configArray.map((item) => (item.replaceAll('{', '').replaceAll('}', '')));
-
   useEffect(() => {
     if (isLocal && globalStateFromExtension.scaffoldingFile) {
       setDataConfig(JSON.parse(globalStateFromExtension.scaffoldingFile).variables);
@@ -67,7 +65,7 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
   return (
     <>
       <ModalSelect
-        data={dataConfigFormated(dataConfig)}
+        data={dataConfig}
         handleDialogValue={handleModalValue}
         handleSubmitData={handleSubmitData}
         title={folderSelected}
