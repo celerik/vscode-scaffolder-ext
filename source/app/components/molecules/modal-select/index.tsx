@@ -40,7 +40,7 @@ const ModalSelect = ({
   const onClickSubmit = (fields: any) => {
     handleSubmitData(fields);
     handleCloseDialog();
-  }
+  };
 
   return (
     <Dialog open={value} disableEscapeKeyDown fullWidth sx={{ borderRadius: 0 }} maxWidth="sm">
@@ -57,7 +57,7 @@ const ModalSelect = ({
           {data.map((item) => (
             <React.Fragment key={item}>
               <Typography gutterBottom sx={{ color: 'text.secondary' }} variant="body1">
-                { `{{${item}}}`}
+                {item}
               </Typography>
               <TextField
                 error={Boolean(errors[item])}

@@ -1,7 +1,9 @@
+// packages
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-import * as Mustache from 'mustache';
+
+// scripts
 import {
   Message, CommonMessage, StateMessage, FilesMessage
 } from './messages/messageTypes';
@@ -72,10 +74,10 @@ export class ViewLoader {
               data.data.forEach((el) => {
                 const [, pathFolder] = el.path.split(data.folder);
                 if (!vscode.workspace.workspaceFolders) throw new Error();
-                const newPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}${Mustache.render(pathFolder, data.fields)}`;
+                const newPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}${this.onRenderContent(pathFolder, data.fields)}`;
                 const fileExists = this.thereIsAFile(newPath);
                 if (!fileExists) {
-                  fs.writeFileSync(newPath, Mustache.render(el.content, data.fields));
+                  fs.writeFileSync(newPath, this.onRenderContent(el.content, data.fields));
                 }
               });
               vscode.window.showInformationMessage('Scaffolding completed successfully.');
@@ -140,6 +142,14 @@ export class ViewLoader {
     return false;
   }
 
+  onRenderContent(data: string, values: Record<string, string>) {
+    let stringContent = data;
+    Object.keys(values).forEach((key) => {
+      stringContent = stringContent.replaceAll(key, values[key]);
+    });
+    return stringContent;
+  }
+
   onCreateDir(data: any, values: Record<string, string>) {
     try {
       if (!vscode.workspace.workspaceFolders) throw new Error();
@@ -154,11 +164,12 @@ export class ViewLoader {
       contentPaths
         .filter((element) => element.relativePath !== `${localPath}\\config.json`)
         .forEach((el) => {
-          const newPath = Mustache.render(el.path, values);
+          const newPath = this.onRenderContent(el.path, values);
           const fileExists = this.thereIsAFile(newPath);
           if (!fileExists) {
             const contentFile = fs.readFileSync(el.relativePath, 'utf8');
-            fs.writeFileSync(newPath, Mustache.render(contentFile, values));
+            this.onRenderContent(contentFile, values);
+            fs.writeFileSync(newPath, this.onRenderContent(contentFile, values));
           }
         });
       vscode.window.showInformationMessage('Scaffolding completed successfully.');
