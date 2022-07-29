@@ -2,6 +2,14 @@
 
 All notable changes to the "celerik-scaffolder" extension will be documented in this file.
 
+## Version 1.0.3
+
+- Release date: Julio 29, 2022
+
+### Added
+- Add license file
+- Add support for vs code web
+
 ## Version 1.0.2
 
 - Release date: Julio 28, 2022
