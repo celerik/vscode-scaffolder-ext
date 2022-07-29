@@ -1,7 +1,6 @@
 const path = require('path');
 
 module.exports = {
-  target: 'webworker',
   entry: path.join(__dirname, 'app', 'index.tsx'),
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.css']
