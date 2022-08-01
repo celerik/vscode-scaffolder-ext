@@ -13,9 +13,9 @@ To create files with our extension is necessary:
 - Install the extension
 - Right click on a folder of the project (any, it does not affect the selected folder)
 - Select one of the local or remote templates in the list
-- Replace the variables found in the config.json file with the name we want to assign to it at the time of file creation
+- Replace the variables found in the config.json file with the name you want to assign to it at the time of file creation
 - Click on generate
-- The files will be created following the path found inside the template, that is why each template must have the folder structure where we want them to be created, for example src/components
+- The files will be created following the path found inside the template, that is why each template must have the folder structure where you want them to be created, for example src/components
 
  ![Demo](images/working.gif)
 
