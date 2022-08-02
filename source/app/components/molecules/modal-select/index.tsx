@@ -2,6 +2,7 @@
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
@@ -43,7 +44,7 @@ const ModalSelect = ({
   };
 
   return (
-    <Dialog open={value} disableEscapeKeyDown fullWidth sx={{ borderRadius: 0 }} maxWidth="sm">
+    <Dialog open={value} disableEscapeKeyDown fullWidth sx={{ borderRadius: 0, ...styles.dialog }} maxWidth="sm">
       <DialogTitle sx={styles.titleContainer} component="div">
         <Typography gutterBottom variant="h4" sx={styles.title}>
           {title}
@@ -52,8 +53,8 @@ const ModalSelect = ({
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent dividers sx={styles.content}>
-        <form onSubmit={handleSubmit(onClickSubmit)} style={{ display: 'contents' }}>
+      <form onSubmit={handleSubmit(onClickSubmit)} style={{ display: 'contents' }}>
+        <DialogContent dividers sx={styles.content}>
           {data.map((item) => (
             <React.Fragment key={item}>
               <Typography gutterBottom sx={{ color: 'text.secondary' }} variant="body1">
@@ -72,11 +73,13 @@ const ModalSelect = ({
               />
             </React.Fragment>
           ))}
+        </DialogContent>
+        <DialogActions disableSpacing>
           <Button variant="contained" type="submit" sx={styles.saveButton}>
-            Generate
+            Generates
           </Button>
-        </form>
-      </DialogContent>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };
