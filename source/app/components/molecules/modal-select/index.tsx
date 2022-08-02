@@ -58,7 +58,7 @@ const ModalSelect = ({
           {data.map((item) => (
             <React.Fragment key={item}>
               <Typography gutterBottom sx={{ color: 'text.secondary' }} variant="body1">
-                { `{{${item}}}`}
+                {item}
               </Typography>
               <TextField
                 error={Boolean(errors[item])}

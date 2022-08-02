@@ -45,7 +45,7 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
   };
 
   const handleSubmitData = async (fields: {}) => {
-    const remoteFiles = await remoteList
+    const remoteFiles = !isLocal && await remoteList
       .getTreeFolders(globalStateFromExtension.templateUrl, folderSelected);
     vscode.postMessage({
       type: 'SCAFFOLDING',
@@ -54,8 +54,6 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
       }
     });
   };
-
-  const dataConfigFormated = (configArray: string[]) => configArray.map((item) => (item.replaceAll('{', '').replaceAll('}', '')));
 
   useEffect(() => {
     if (isLocal && globalStateFromExtension.scaffoldingFile) {
@@ -67,7 +65,7 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
   return (
     <>
       <ModalSelect
-        data={dataConfigFormated(dataConfig)}
+        data={dataConfig}
         handleDialogValue={handleModalValue}
         handleSubmitData={handleSubmitData}
         title={folderSelected}
