@@ -22,27 +22,25 @@ const RowItemTemplate = ({ nameFolder, link, functionSelect }: Props) => {
   };
 
   return (
-    <Grid item md={6} xs={12} sx={styles.content}>
-      <ListItem divider sx={styles.listItem}>
-        <Grid container>
-          <Grid xs={7} md={9} item container alignItems="center">
-            <Typography variant="body1" sx={styles.textFolder}>{nameFolderFormat()}</Typography>
-          </Grid>
-          <Grid xs={3} md={2} item container alignItems="center">
-            {link && (
-              <Link href={link} sx={{ fontSize: '12px' }} underline="always">
-                Open in Github
-              </Link>
-            )}
-          </Grid>
-          <Grid xs={2} md={1} item>
-            <Button onClick={functionSelect} variant="text" sx={styles.buttonSelect}>
-              select
-            </Button>
-          </Grid>
+    <ListItem divider sx={styles.listItem}>
+      <Grid container>
+        <Grid xs={7} md={8} item container alignItems="center">
+          <Typography variant="body1" sx={styles.textFolder}>{nameFolderFormat()}</Typography>
         </Grid>
-      </ListItem>
-    </Grid>
+        <Grid xs={3} md={2} item container alignItems="center">
+          {link && (
+          <Link href={link} sx={{ fontSize: '12px' }} underline="always">
+            Open in Github
+          </Link>
+          )}
+        </Grid>
+        <Grid xs={2} md={2} item>
+          <Button onClick={functionSelect} variant="text" sx={styles.buttonSelect}>
+            select
+          </Button>
+        </Grid>
+      </Grid>
+    </ListItem>
   );
 };
 

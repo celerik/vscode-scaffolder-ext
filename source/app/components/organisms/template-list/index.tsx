@@ -78,16 +78,17 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
           </Typography>
         </Paper>
         <List sx={styles.list}>
-          <Grid container>
+          <Grid container spacing={2}>
             {data.length ? data.map((folder) => (
-              <ListItem
-                key={(folder.name || folder) as React.Key}
-                link={folder.html_url}
-                nameFolder={(folder.name || folder) as string}
-                functionSelect={
-                  () => getFileConfigSelected(folder.name)
-                }
-              />
+              <Grid key={(folder.name || folder) as React.Key} md={6} xs={12} item>
+                <ListItem
+                  link={folder.html_url}
+                  nameFolder={(folder.name || folder) as string}
+                  functionSelect={
+                    () => getFileConfigSelected(folder.name)
+                  }
+                />
+              </Grid>
             )) : (
               <Typography variant="h5" sx={styles.noResourceLabel}>
                 No resources founds
