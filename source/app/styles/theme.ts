@@ -14,24 +14,24 @@ const colors = {
   lavanderGrey: '#BEC2D1',
   hanBlue: '#3A78D1',
   chineseBlack: '#151515',
-  raisinBlack: '#242424'
+  raisinBlack: '#242424',
+  sonicSilver: '#757575'
 };
 
 const theme = createTheme({
   palette: {
     background: {
       default: colors.chineseBlack,
-      paper: colors.chineseBlack
+      paper: colors.raisinBlack
     },
     grey: {
       500: colors.philippineSilver
     },
     primary: {
-      main: colors.white,
-      light: colors.raisinBlack
+      main: colors.white
     },
     secondary: {
-      main: colors.japaneseIndigo
+      main: colors.sonicSilver
     },
     text: {
       primary: colors.cornflowerBlue,
@@ -70,7 +70,7 @@ const theme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         root: {
-          backgroundColor: colors.charcoal,
+          backgroundColor: colors.chineseBlack,
           color: 'white'
         }
       }

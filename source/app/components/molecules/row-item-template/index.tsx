@@ -22,7 +22,7 @@ const RowItemTemplate = ({ nameFolder, link, functionSelect }: Props) => {
   };
 
   return (
-    <Grid md={6} sx={styles.content}>
+    <Grid item md={6} xs={12} sx={styles.content}>
       <ListItem divider sx={styles.listItem}>
         <Grid container>
           <Grid xs={7} md={9} item container alignItems="center">

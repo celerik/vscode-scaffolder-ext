@@ -1,13 +1,20 @@
 import { Theme } from '@mui/material';
 
 export default {
-  content: { display: 'flex', flexDirection: 'column' },
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    borderColor: 'background.main'
+  },
   saveButton: {
     alignSelf: 'end',
     mt: 2,
     width: '25%'
   },
-  titleContainer: { m: 0, pl: 2 },
+  titleContainer: {
+    m: 0,
+    pl: 2
+  },
   title: { color: 'white', m: 0, fontWeight: 500 },
   iconButton: {
     color: (theme: Theme) => theme.palette.grey[500],

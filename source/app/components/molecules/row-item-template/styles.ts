@@ -6,10 +6,10 @@ export default {
     mt: '3px'
   },
   content: {
-    paddingRight: 5
+    // paddingRight: 5
   },
   listItem: {
     borderBottom: '1px solid',
-    borderColor: 'primary.light'
+    borderColor: 'background.paper'
   }
 };

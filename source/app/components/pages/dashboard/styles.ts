@@ -9,7 +9,7 @@ export default {
     margin: '10px 0px'
   },
   divider: {
-    borderColor: 'primary.light',
+    borderColor: 'background.paper',
     width: '100%'
   },
   list: {
