@@ -47,7 +47,9 @@ git reset --hard
 
 To publish the extension to marketplace you must have been added as a contributor in the publisher. If you have been added, then follow the next steps:
 
-1. First, you should generate a personal access token in Azure DevOps that you can do in the next URL https://dev.azure.com/celerik/_usersSettings/tokens
+1. First, you should generate a personal access token in Azure DevOps that you can do in the next URL https://dev.azure.com/celerik/_usersSettings/tokens.When you generate, you must choose the **marketplace** scope like the next image:
+
+![image](https://user-images.githubusercontent.com/103968350/182439560-c72498f6-03a8-4e48-8be1-453530fe30f4.png)
 
 2. Run the next command:
 
