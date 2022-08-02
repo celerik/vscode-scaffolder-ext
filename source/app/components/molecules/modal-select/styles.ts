@@ -2,9 +2,9 @@ import { Theme } from '@mui/material';
 
 export default {
   content: {
+    borderBottom: 'none',
     display: 'flex',
-    flexDirection: 'column',
-    borderBottom: 'none'
+    flexDirection: 'column'
   },
   saveButton: {
     alignSelf: 'end',
