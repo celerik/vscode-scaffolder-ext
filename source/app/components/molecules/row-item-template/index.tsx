@@ -8,6 +8,7 @@ import ListItem from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 
 // scripts
+import DevIcon from '../../atoms/dev-icon';
 import styles from './styles';
 
 export interface Props {
@@ -20,6 +21,7 @@ const RowItemTemplate = ({ nameFolder, link, functionSelect }: Props) => (
   <>
     <ListItem>
       <Grid container>
+        <DevIcon customStyle={styles.icon} iconName={nameFolder.split('-')[0]} />
         <Grid xs={7} md={9} item container alignItems="center">
           <Typography variant="body1" sx={styles.textFolder}>{nameFolder}</Typography>
         </Grid>
@@ -30,7 +32,7 @@ const RowItemTemplate = ({ nameFolder, link, functionSelect }: Props) => (
             </Link>
           )}
         </Grid>
-        <Grid xs={2} md={1} item>
+        <Grid xs={1} md={1} item>
           <Button onClick={functionSelect} variant="text" sx={styles.buttonSelect}>
             select
           </Button>
