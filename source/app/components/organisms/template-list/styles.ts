@@ -1,6 +1,8 @@
 export default {
   list: {
-    bgcolor: 'background.paper'
+    bgcolor: 'background.paper',
+    display: 'flex',
+    flexWrap: 'wrap'
   },
   paper: {
     bgcolor: 'background.paper',

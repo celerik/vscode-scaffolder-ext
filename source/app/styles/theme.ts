@@ -12,20 +12,23 @@ const colors = {
   policeBlue: '#394A61',
   white: '#FFFFFF',
   lavanderGrey: '#BEC2D1',
-  hanBlue: '#3A78D1'
+  hanBlue: '#3A78D1',
+  chineseBlack: '#151515',
+  raisinBlack: '#242424'
 };
 
 const theme = createTheme({
   palette: {
     background: {
-      default: colors.gunmetal,
-      paper: colors.policeBlue
+      default: colors.chineseBlack,
+      paper: colors.chineseBlack
     },
     grey: {
       500: colors.philippineSilver
     },
     primary: {
-      main: colors.white
+      main: colors.white,
+      light: colors.raisinBlack
     },
     secondary: {
       main: colors.japaneseIndigo
