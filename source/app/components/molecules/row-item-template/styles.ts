@@ -17,5 +17,8 @@ export default {
     display: 'flex',
     marginLeft: 10,
     marginRight: -5
+  },
+  subContainer: {
+    display: 'flex'
   }
 };
