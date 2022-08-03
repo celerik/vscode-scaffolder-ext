@@ -16,6 +16,10 @@ export default {
     pl: 2
   },
   title: { color: 'white', m: 0, fontWeight: 500 },
+  subtitle: {
+    color: 'text.secondary',
+    marginTop: 1
+  },
   iconButton: {
     color: (theme: Theme) => theme.palette.grey[500],
     position: 'absolute',

@@ -15,7 +15,8 @@ const colors = {
   hanBlue: '#3A78D1',
   chineseBlack: '#151515',
   raisinBlack: '#242424',
-  sonicSilver: '#757575'
+  sonicSilver: '#757575',
+  outerSpace: '#444444'
 };
 
 const theme = createTheme({
@@ -80,13 +81,20 @@ const theme = createTheme({
         contained: {
           padding: '10px 20px',
           height: 'min-content',
-          color: colors.cornflowerBlue,
-          bgColor: 'white',
+          color: colors.white,
+          backgroundColor: colors.outerSpace,
           textTransform: 'capitalize',
           fontWeight: '500'
         },
         text: {
           color: colors.hanBlue
+        }
+      }
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          color: colors.white
         }
       }
     }

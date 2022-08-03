@@ -91,7 +91,7 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
               </Grid>
             )) : (
               <Typography variant="h5" sx={styles.noResourceLabel}>
-                No resources founds
+                No resources found
               </Typography>
             )}
           </Grid>

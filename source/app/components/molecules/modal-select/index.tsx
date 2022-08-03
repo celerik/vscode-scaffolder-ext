@@ -11,8 +11,11 @@ import Typography from '@mui/material/Typography';
 import { useForm } from 'react-hook-form';
 
 // @scripts
-import styles from './styles';
+import { formatCapitalLetters } from '../../../utils/utils';
 import { GlobalStateContext } from '../../../context/MessageContext';
+
+// @styles
+import styles from './styles';
 
 interface Props {
   handleDialogValue: (state: boolean) => void;
@@ -46,7 +49,7 @@ const ModalSelect = ({
     <Dialog open={value} disableEscapeKeyDown fullWidth sx={{ borderRadius: 0 }} maxWidth="sm">
       <DialogTitle sx={styles.titleContainer} component="div">
         <Typography gutterBottom variant="h4" sx={styles.title}>
-          {title}
+          {formatCapitalLetters(title)}
         </Typography>
         <IconButton aria-label="close" onClick={handleCloseDialog} sx={styles.iconButton}>
           <CloseIcon />
@@ -56,7 +59,7 @@ const ModalSelect = ({
         <form onSubmit={handleSubmit(onClickSubmit)} style={{ display: 'contents' }}>
           {data.map((item) => (
             <React.Fragment key={item}>
-              <Typography gutterBottom sx={{ color: 'text.secondary' }} variant="body1">
+              <Typography gutterBottom sx={styles.subtitle} variant="subtitle1">
                 {item}
               </Typography>
               <TextField
