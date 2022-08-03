@@ -9,12 +9,14 @@ import TemplateList from '../../organisms/template-list';
 // scripts
 import SettingsButton from '../../molecules/settings-section';
 import styles from './styles';
+import { GIT_URL } from '../../../utils/regex';
 import { GlobalStateContext } from '../../../context/MessageContext';
 import { IFolder } from '../../../utils/interfaces/remoteFolders.interface';
 import { remoteList } from '../../../api/remote-list';
 
 const Dashboard = () => {
   const [localData, setLocalData] = useState<IFolder[]>([]);
+  const [owner, setOwner] = useState<string>('');
   const [remoteData, setRemoteData] = useState<IFolder[]>([]);
   const { globalStateFromExtension } = useContext(GlobalStateContext);
 
@@ -23,6 +25,8 @@ const Dashboard = () => {
       const data = await remoteList.getListOfFolders(
         globalStateFromExtension.templateUrl
       );
+      const urlFragment = GIT_URL.exec(globalStateFromExtension.templateUrl);
+      if (urlFragment) setOwner(urlFragment[4]);
       setRemoteData(data);
     }
   };
@@ -48,7 +52,7 @@ const Dashboard = () => {
         <Divider sx={styles.divider} />
       </Grid>
       <Grid sx={styles.list} item>
-        <TemplateList data={remoteData} title="Remote Templates" />
+        <TemplateList data={remoteData} owner={owner} title="Remote Templates" />
         <TemplateList isLocal data={localData} title="Local Templates" />
       </Grid>
     </Grid>

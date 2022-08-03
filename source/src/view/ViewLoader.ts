@@ -5,7 +5,7 @@ import * as fs from 'fs';
 
 // scripts
 import {
-  Message, CommonMessage, StateMessage, FilesMessage
+  Message, CommonMessage, StateMessage, FilesMessage, RedirectMessage
 } from './messages/messageTypes';
 
 export class ViewLoader {
@@ -48,9 +48,11 @@ export class ViewLoader {
     this.panel.webview.onDidReceiveMessage(
       (message: Message) => {
         switch (message.type) {
-          case 'RELOAD':
-            vscode.commands.executeCommand('workbench.action.webview.reloadWebviewAction');
+          case 'REDIRECT': {
+            const url = (message as RedirectMessage).payload;
+            vscode.env.openExternal(vscode.Uri.parse(url));
             break;
+          }
           case 'STATE': {
             const text = (message as StateMessage).payload;
             context.globalState.update(templateUrl, JSON.stringify(text));

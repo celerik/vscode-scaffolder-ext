@@ -1,10 +1,15 @@
 import { Theme } from '@mui/material';
 
 export default {
-  content: { display: 'flex', flexDirection: 'column' },
+  content: {
+    borderBottom: 'none',
+    display: 'flex',
+    flexDirection: 'column'
+  },
   saveButton: {
     alignSelf: 'end',
-    mt: 2,
+    marginBottom: 2,
+    marginRight: 2,
     width: '25%'
   },
   titleContainer: { m: 0, pl: 2 },
@@ -26,5 +31,14 @@ export default {
         borderColor: 'secondary.main'
       }
     }
+  },
+  dialog: {
+    maxHeight: '80%'
+  },
+  varContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10,
+    margin: '10px 0'
   }
 };
