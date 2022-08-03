@@ -5,8 +5,16 @@ import * as fs from 'fs';
 
 // scripts
 import {
-  Message, CommonMessage, StateMessage, FilesMessage
+  CommonMessage,
+  FilesMessage,
+  Message,
+  StateMessage
 } from './messages/messageTypes';
+import {
+  ensureDirectoryExistence,
+  onRenderContent,
+  walk
+} from '../../utils/filesManagement';
 
 export class ViewLoader {
   public static currentPanel?: vscode.WebviewPanel;
@@ -74,10 +82,13 @@ export class ViewLoader {
               data.data.forEach((el) => {
                 const [, pathFolder] = el.path.split(data.folder);
                 if (!vscode.workspace.workspaceFolders) throw new Error();
-                const newPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}${this.onRenderContent(pathFolder, data.fields)}`;
+                const newPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}${onRenderContent(pathFolder, data.fields, data.expressions)}`;
                 const fileExists = this.thereIsAFile(newPath);
                 if (!fileExists) {
-                  fs.writeFileSync(newPath, this.onRenderContent(el.content, data.fields));
+                  fs.writeFileSync(
+                    newPath,
+                    onRenderContent(el.content, data.fields, data.expressions)
+                  );
                 }
               });
               vscode.window.showInformationMessage('Scaffolding completed successfully.');
@@ -106,55 +117,20 @@ export class ViewLoader {
     );
   }
 
-  walk(dir: string) {
-    let results: string[] = [];
-    const list = fs.readdirSync(dir);
-    list.forEach((file) => {
-      const newFile = `${dir}\\${file}`;
-      const stat = fs.statSync(newFile);
-      if (stat && stat.isDirectory()) {
-        /* Recurse into a subdirectory */
-        results = results.concat(this.walk(newFile));
-      } else {
-        /* Is a file */
-        results.push(newFile);
-      }
-    });
-    return results;
-  }
-
-  ensureDirectoryExistence(filePath: string) {
-    const dirname = path.dirname(filePath);
-    if (fs.existsSync(dirname)) {
-      return true;
-    }
-    this.ensureDirectoryExistence(dirname);
-    fs.mkdirSync(dirname);
-    return false;
-  }
-
   thereIsAFile(newPath: string) {
     if (fs.existsSync(newPath)) {
       vscode.window.showErrorMessage(`Currently there is a file with the path ${newPath}; that is why this file was not created.`);
       return true;
     }
-    this.ensureDirectoryExistence(newPath);
+    ensureDirectoryExistence(newPath);
     return false;
-  }
-
-  onRenderContent(data: string, values: Record<string, string>) {
-    let stringContent = data;
-    Object.keys(values).forEach((key) => {
-      stringContent = stringContent.replaceAll(key, values[key]);
-    });
-    return stringContent;
   }
 
   onCreateDir(data: any, values: Record<string, string>) {
     try {
       if (!vscode.workspace.workspaceFolders) throw new Error();
       const localPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}\\Scaffolding\\${data.folder}`;
-      const contentPaths = this.walk(localPath).map((innerPath: string) => {
+      const contentPaths = walk(localPath).map((innerPath: string) => {
         const [route, endRoute] = innerPath.split(`\\Scaffolding\\${data.folder}`);
         return {
           path: `${route}${endRoute}`,
@@ -164,12 +140,11 @@ export class ViewLoader {
       contentPaths
         .filter((element) => element.relativePath !== `${localPath}\\config.json`)
         .forEach((el) => {
-          const newPath = this.onRenderContent(el.path, values);
+          const newPath = onRenderContent(el.path, values, data.expressions);
           const fileExists = this.thereIsAFile(newPath);
           if (!fileExists) {
             const contentFile = fs.readFileSync(el.relativePath, 'utf8');
-            this.onRenderContent(contentFile, values);
-            fs.writeFileSync(newPath, this.onRenderContent(contentFile, values));
+            fs.writeFileSync(newPath, onRenderContent(contentFile, values, data.expressions));
           }
         });
       vscode.window.showInformationMessage('Scaffolding completed successfully.');
