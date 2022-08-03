@@ -7,8 +7,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 
 // Scripts
-import ListItem from '../../molecules/row-item-template';
 import ModalSelect from '../../molecules/modal-select';
+import RowItemTemplate from '../../molecules/row-item-template';
 import styles from './styles';
 import { GlobalStateContext } from '../../../context/MessageContext';
 import { IFolder } from '../../../utils/interfaces/remoteFolders.interface';
@@ -18,10 +18,11 @@ import { remoteList } from '../../../api/remote-list';
 interface Props {
   data: IFolder[];
   isLocal?: boolean;
+  owner?: string;
   title: string;
 }
 
-const TemplateList = ({ title, data, isLocal }: Props) => {
+const TemplateList = ({ title, data, owner, isLocal }: Props) => {
   const { globalStateFromExtension } = useContext(GlobalStateContext);
 
   const [dataConfig, setDataConfig] = useState<Array<string>>([]);
@@ -79,9 +80,10 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
         </Paper>
         <List sx={styles.list}>
           {data.length ? data.map((folder) => (
-            <ListItem
+            <RowItemTemplate
               key={(folder.name || folder) as React.Key}
               link={folder.html_url}
+              owner={!isLocal ? owner : ''}
               nameFolder={(folder.name || folder) as string}
               functionSelect={
                 () => getFileConfigSelected(folder.name)
@@ -99,7 +101,8 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
 };
 
 TemplateList.defaultProps = {
-  isLocal: false
+  isLocal: false,
+  owner: ''
 };
 
 export default TemplateList;
