@@ -1,0 +1,88 @@
+{
+  "name": "celerik-scaffolder",
+  "displayName": "Celerik Scaffolder",
+  "description": "Extension for VSCode that helps to automate code generation through scaffolding",
+  "publisher": "CelerikScaffolding",
+  "version": "1.0.4",
+  "icon": "images/scaffolder.png",
+  "engines": {
+    "vscode": "^1.68.0"
+  },
+  "categories": [
+    "Snippets"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/celerik/vscode-scaffolder-ext.git"
+  },
+  "activationEvents": [
+    "onCommand:celerik-scaffolder.open"
+  ],
+  "main": "./out/src/extension.js",
+  "contributes": {
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "celerik-scaffolder.open",
+          "when": "explorerResourceIsFolder"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "celerik-scaffolder.open",
+        "title": "Celerik Scaffolder"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "npm-run-all compile:*",
+    "compile:extension": "tsc -p ./",
+    "compile:view": "webpack --mode development",
+    "lint": "eslint src app --ext ts",
+    "pretest": "npm run compile && npm run lint",
+    "test": "node ./out/test/runTest.js",
+    "vscode:prepublish": "npm run compile",
+    "watch": "npm-run-all -p watch:*",
+    "watch:extension": "tsc -watch -p ./",
+    "watch:view": "webpack --watch --mode development"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^18.0.0",
+    "@types/react": "^18.0.14",
+    "@types/react-dom": "^18.0.5",
+    "@types/vscode": "^1.68.0",
+    "@typescript-eslint/eslint-plugin": "^5.28.0",
+    "@typescript-eslint/parser": "^5.28.0",
+    "css-loader": "^6.7.1",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.7.3",
+    "vscode-test": "^1.4.1",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/material": "^5.8.4",
+    "axios": "^0.27.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.32.2",
+    "react-router-dom": "^6.3.0"
+  }
+}
