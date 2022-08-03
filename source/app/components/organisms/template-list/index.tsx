@@ -51,7 +51,11 @@ const TemplateList = ({ title, data, owner, isLocal }: Props) => {
     vscode.postMessage({
       type: 'SCAFFOLDING',
       payload: {
-        folder: folderSelected, fields, isLocal, data: remoteFiles
+        data: remoteFiles,
+        fields,
+        folder: folderSelected,
+        isLocal,
+        expressions: JSON.parse(globalStateFromExtension.scaffoldingFile).expressions
       }
     });
   };

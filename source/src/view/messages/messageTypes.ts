@@ -16,6 +16,7 @@ export interface Data {
   folder: string;
   fields: Record<string, string>;
   isLocal: boolean;
+  expressions: Record<string, { case: string; variable: string }>;
 }
 
 export interface CommonMessage extends Message {
