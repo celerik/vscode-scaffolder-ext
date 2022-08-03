@@ -34,5 +34,11 @@ export default {
   },
   dialog: {
     maxHeight: '80%'
+  },
+  varContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10,
+    margin: '10px 0'
   }
 };
