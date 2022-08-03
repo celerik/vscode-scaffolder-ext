@@ -1,6 +1,7 @@
 // packages
-import * as path from 'path';
 import * as fs from 'fs';
+import * as path from 'path';
+import * as vscode from 'vscode';
 import {
   camelCase,
   kebabCase,
@@ -54,7 +55,7 @@ const onRenderContent = (
           ](values[expressions[expression].variable])
         );
     } else {
-      console.error(`Invalid expression: ${expressions[expression].case}`);
+      vscode.window.showErrorMessage(`Invalid case: ${expressions[expression].case}`);
     }
   });
   return stringContent;
