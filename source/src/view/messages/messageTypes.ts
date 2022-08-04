@@ -13,10 +13,11 @@ export interface IFolder {
 
 export interface Data {
   data: Array<IFolder>;
-  folder: string;
-  fields: Record<string, string>;
-  isLocal: boolean;
   expressions: Record<string, { case: string; variable: string }>;
+  fields: Record<string, string>;
+  folder: string;
+  isLocal: boolean;
+  isRelative: boolean;
 }
 
 export interface CommonMessage extends Message {

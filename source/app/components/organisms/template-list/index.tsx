@@ -11,7 +11,7 @@ import ModalSelect from '../../molecules/modal-select';
 import RowItemTemplate from '../../molecules/row-item-template';
 import styles from './styles';
 import { GlobalStateContext } from '../../../context/MessageContext';
-import { IFolder } from '../../../utils/interfaces/remoteFolders.interface';
+import { IFolder, IDataConfig } from '../../../utils/interfaces/remoteFolders.interface';
 import { localList } from '../../../api/local-list';
 import { remoteList } from '../../../api/remote-list';
 
@@ -22,10 +22,15 @@ interface Props {
   title: string;
 }
 
-const TemplateList = ({ title, data, owner, isLocal }: Props) => {
+const TemplateList = ({
+  data,
+  isLocal,
+  owner,
+  title
+}: Props) => {
   const { globalStateFromExtension } = useContext(GlobalStateContext);
 
-  const [dataConfig, setDataConfig] = useState<Array<string>>([]);
+  const [dataConfig, setDataConfig] = useState<IDataConfig>({ variables: [] });
   const [folderSelected, setFolderSelected] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -33,12 +38,12 @@ const TemplateList = ({ title, data, owner, isLocal }: Props) => {
 
   const getFileConfigSelected = async (folderName: string) => {
     setFolderSelected(folderName);
-    let configFile: string[] = [];
+    let configFile: IDataConfig = { variables: [] };
     if (isLocal) {
       localList.getConfigFile(folderName);
     } else {
       configFile = await remoteList.getConfigFile(globalStateFromExtension.templateUrl, folderName);
-      if (configFile.length) {
+      if (configFile.variables.length) {
         setDataConfig(configFile);
         handleModalValue(true);
       }
@@ -51,18 +56,19 @@ const TemplateList = ({ title, data, owner, isLocal }: Props) => {
     vscode.postMessage({
       type: 'SCAFFOLDING',
       payload: {
-        data: remoteFiles,
-        fields,
         folder: folderSelected,
+        fields,
         isLocal,
-        expressions: JSON.parse(globalStateFromExtension.scaffoldingFile).expressions
+        data: remoteFiles,
+        isRelative: dataConfig.isRelative,
+        expressions: dataConfig.expressions || {}
       }
     });
   };
 
   useEffect(() => {
     if (isLocal && globalStateFromExtension.scaffoldingFile) {
-      setDataConfig(JSON.parse(globalStateFromExtension.scaffoldingFile).variables);
+      setDataConfig(JSON.parse(globalStateFromExtension.scaffoldingFile));
       handleModalValue(true);
     }
   }, [globalStateFromExtension.scaffoldingFile]);
@@ -70,7 +76,7 @@ const TemplateList = ({ title, data, owner, isLocal }: Props) => {
   return (
     <>
       <ModalSelect
-        data={dataConfig}
+        data={dataConfig.variables}
         handleDialogValue={handleModalValue}
         handleSubmitData={handleSubmitData}
         title={folderSelected}

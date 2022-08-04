@@ -7,20 +7,25 @@ import axios from 'axios';
 import { API_URL_GITHUB } from './index';
 import { ErrorMessage } from '../../src/view/messages/messageTypes';
 import { GIT_URL } from '../utils/regex';
-import { IFolder, IResult, IResultInfo } from '../utils/interfaces/remoteFolders.interface';
+import {
+  IDataConfig,
+  IFolder,
+  IResult,
+  IResultInfo
+} from '../utils/interfaces/remoteFolders.interface';
 
 export class RemoteList {
-  async getConfigFile(urlRepo:string, nameFolder: any): Promise<Array<string>> {
+  async getConfigFile(urlRepo:string, nameFolder: any): Promise<IDataConfig> {
     try {
       const infoFile = await this.getFile(urlRepo, nameFolder, 'config.json');
       const request = await axios.get(infoFile.download_url || '');
-      return request.data.variables;
+      return request.data;
     } catch (error: any) {
       vscode.postMessage<ErrorMessage>({
         type: 'ERROR',
         payload: error.message as string
       });
-      return [];
+      return { variables: [] };
     }
   }
 
