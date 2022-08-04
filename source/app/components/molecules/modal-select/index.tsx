@@ -61,7 +61,7 @@ const ModalSelect = ({
       </DialogTitle>
       <form onSubmit={handleSubmit(onClickSubmit)} style={{ display: 'contents' }}>
         <DialogContent dividers sx={styles.content}>
-          {data.map((item) => (
+          {data?.map((item) => (
             <React.Fragment key={item.name || item}>
               <div style={styles.varContainer}>
                 <Typography gutterBottom sx={{ color: 'text.secondary', margin: 0 }} variant="body1">

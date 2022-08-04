@@ -8,6 +8,9 @@ import {
   Message, CommonMessage, StateMessage, FilesMessage, RedirectMessage
 } from './messages/messageTypes';
 
+// vars
+let currentPath: string;
+
 export class ViewLoader {
   public static currentPanel?: vscode.WebviewPanel;
 
@@ -17,8 +20,11 @@ export class ViewLoader {
 
   private disposables: vscode.Disposable[];
 
-  constructor(context: vscode.ExtensionContext) {
+  private fileUri: vscode.Uri;
+
+  constructor(context: vscode.ExtensionContext, fileUri: vscode.Uri) {
     this.context = context;
+    this.fileUri = fileUri;
     this.disposables = [];
 
     this.panel = vscode.window.createWebviewPanel(
@@ -70,13 +76,15 @@ export class ViewLoader {
           }
           case 'SCAFFOLDING': {
             const data = (message as FilesMessage).payload;
+            if (!vscode.workspace.workspaceFolders) throw new Error();
+            currentPath = data.isRelative
+              ? fileUri.fsPath : vscode.workspace.workspaceFolders[0].uri.fsPath;
             if (data.isLocal) {
               this.onCreateDir(data, data.fields);
             } else {
               data.data.forEach((el) => {
                 const [, pathFolder] = el.path.split(data.folder);
-                if (!vscode.workspace.workspaceFolders) throw new Error();
-                const newPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}${this.onRenderContent(pathFolder, data.fields)}`;
+                const newPath = `${currentPath}${this.onRenderContent(pathFolder, data.fields)}`;
                 const fileExists = this.thereIsAFile(newPath);
                 if (!fileExists) {
                   fs.writeFileSync(newPath, this.onRenderContent(el.content, data.fields));
@@ -157,9 +165,9 @@ export class ViewLoader {
       if (!vscode.workspace.workspaceFolders) throw new Error();
       const localPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}\\Scaffolding\\${data.folder}`;
       const contentPaths = this.walk(localPath).map((innerPath: string) => {
-        const [route, endRoute] = innerPath.split(`\\Scaffolding\\${data.folder}`);
+        const [, endRoute] = innerPath.split(`\\Scaffolding\\${data.folder}`);
         return {
-          path: `${route}${endRoute}`,
+          path: `${currentPath}${endRoute}`,
           relativePath: innerPath
         };
       });
@@ -200,7 +208,7 @@ export class ViewLoader {
     this.panel.webview.html = html;
   }
 
-  static showWebview(context: vscode.ExtensionContext) {
+  static showWebview(context: vscode.ExtensionContext, fileUri: vscode.Uri) {
     const Cls = this;
     const column = vscode.window.activeTextEditor
       ? vscode.window.activeTextEditor.viewColumn
@@ -208,7 +216,7 @@ export class ViewLoader {
     if (Cls.currentPanel) {
       Cls.currentPanel.reveal(column);
     } else {
-      Cls.currentPanel = new Cls(context).panel;
+      Cls.currentPanel = new Cls(context, fileUri).panel;
     }
   }
 
