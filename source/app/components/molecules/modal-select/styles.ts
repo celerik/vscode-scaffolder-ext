@@ -3,12 +3,14 @@ import { Theme } from '@mui/material';
 export default {
   content: {
     display: 'flex',
-    flexDirection: 'column',
-    borderColor: 'background.main'
+    borderColor: 'background.main',
+    borderBottom: 'none',
+    flexDirection: 'column'
   },
   saveButton: {
     alignSelf: 'end',
-    mt: 2,
+    marginBottom: 2,
+    marginRight: 2,
     width: '25%'
   },
   titleContainer: {
@@ -18,7 +20,8 @@ export default {
   title: { color: 'white', m: 0, fontWeight: 500 },
   subtitle: {
     color: 'text.secondary',
-    marginTop: 1
+    marginTop: 1,
+    margin: 0
   },
   iconButton: {
     color: (theme: Theme) => theme.palette.grey[500],
@@ -37,5 +40,14 @@ export default {
         borderColor: 'secondary.main'
       }
     }
+  },
+  dialog: {
+    maxHeight: '80%'
+  },
+  varContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10,
+    margin: '10px 0'
   }
 };

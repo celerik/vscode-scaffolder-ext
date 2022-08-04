@@ -1,9 +1,11 @@
+/* global vscode */
 // @package
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
 import ListItem from '@mui/material/ListItem';
+// import Divider from '@mui/material/Divider';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 // @scripts
@@ -13,31 +15,56 @@ import { formatCapitalLetters } from '../../../utils/utils';
 import styles from './styles';
 
 export interface Props {
-  nameFolder: string;
   functionSelect: () => void;
   link: string | undefined;
+  nameFolder: string;
+  owner?: string;
 }
 
-const RowItemTemplate = ({ nameFolder, link, functionSelect }: Props) => (
-  <ListItem divider sx={styles.listItem}>
-    <Grid container>
-      <Grid xs={7} md={8} item container alignItems="center">
-        <Typography variant="body1" sx={styles.textFolder}>{formatCapitalLetters(nameFolder)}</Typography>
+const RowItemTemplate = ({
+  functionSelect,
+  link,
+  nameFolder,
+  owner
+}: Props) => {
+  const onClickGithub = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (link) {
+      vscode.postMessage({
+        type: 'REDIRECT',
+        payload: link
+      });
+    }
+  };
+
+  return (
+    <ListItem divider onClick={functionSelect} sx={styles.mainContainer}>
+      <Grid container>
+        <Grid xs={11} item container direction="column">
+          <Typography variant="body1" sx={styles.textFolder}>{formatCapitalLetters(nameFolder)}</Typography>
+          {!!owner && (<Typography variant="body2" sx={styles.textFolder}>{`By ${owner}`}</Typography>)}
+        </Grid>
+        <Grid
+          xs={1}
+          item
+          container
+          alignItems="center"
+        >
+          {link && (
+          <Tooltip title="Open in Github" arrow>
+            <GitHubIcon
+              onClick={onClickGithub}
+            />
+          </Tooltip>
+          )}
+        </Grid>
       </Grid>
-      <Grid xs={3} md={2} item container alignItems="center">
-        {link && (
-          <Link href={link} sx={{ fontSize: '12px' }} underline="always">
-            Open in Github
-          </Link>
-        )}
-      </Grid>
-      <Grid xs={2} md={2} item>
-        <Button onClick={functionSelect} variant="text" sx={styles.buttonSelect}>
-          select
-        </Button>
-      </Grid>
-    </Grid>
-  </ListItem>
-);
+    </ListItem>
+  );
+};
+
+RowItemTemplate.defaultProps = {
+  owner: ''
+};
 
 export default RowItemTemplate;

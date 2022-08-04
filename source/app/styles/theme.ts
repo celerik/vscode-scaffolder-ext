@@ -7,12 +7,12 @@ const colors = {
   charcoal: '#354459',
   cornflowerBlue: '#708AEF',
   gunmetal: '#263344',
+  hanBlue: '#3A78D1',
   japaneseIndigo: '#293648',
+  lavanderGrey: '#BEC2D1',
   philippineSilver: '#B3B3B3',
   policeBlue: '#394A61',
   white: '#FFFFFF',
-  lavanderGrey: '#BEC2D1',
-  hanBlue: '#3A78D1',
   chineseBlack: '#151515',
   raisinBlack: '#242424',
   sonicSilver: '#757575',
@@ -23,6 +23,7 @@ const theme = createTheme({
   palette: {
     background: {
       default: colors.chineseBlack,
+      hover: colors.raisinBlack,
       paper: colors.raisinBlack
     },
     grey: {

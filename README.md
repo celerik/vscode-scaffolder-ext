@@ -43,3 +43,24 @@ git config --global core.eol lf
 git rm --cached -r .
 git reset --hard
 ```
+### Publish
+
+To publish the extension to marketplace you must have been added as a contributor in the publisher. If you have been added, then follow the next steps:
+
+1. First, you should generate a personal access token in Azure DevOps that you can do in the next URL https://dev.azure.com/celerik/_usersSettings/tokens.When you generate, you must choose the **marketplace** scope like the next image:
+
+![image](https://user-images.githubusercontent.com/103968350/182439560-c72498f6-03a8-4e48-8be1-453530fe30f4.png)
+
+2. Run the next command:
+
+``` 
+vsce login Celerik
+```
+After that, the console will ask you for the token, enter it and then you will be logged in
+
+3. To end run the command to publish this command will push the extension to the marketplace
+
+``` 
+vsce publish --baseImagesUrl https://raw.githubusercontent.com/celerik/vscode-scaffolder-ext/develop/source/
+```
+
