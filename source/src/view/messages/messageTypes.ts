@@ -16,6 +16,7 @@ export interface Data {
   folder: string;
   fields: Record<string, string>;
   isLocal: boolean;
+  isRelative: boolean;
 }
 
 export interface CommonMessage extends Message {
