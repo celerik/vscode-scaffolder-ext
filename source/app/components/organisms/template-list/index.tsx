@@ -14,6 +14,7 @@ import { GlobalStateContext } from '../../../context/MessageContext';
 import { IFolder, IDataConfig } from '../../../utils/interfaces/remoteFolders.interface';
 import { localList } from '../../../api/local-list';
 import { remoteList } from '../../../api/remote-list';
+import { ErrorMessage } from '../../../../src/view/messages/messageTypes';
 
 interface Props {
   data: IFolder[];
@@ -68,8 +69,15 @@ const TemplateList = ({
 
   useEffect(() => {
     if (isLocal && globalStateFromExtension.scaffoldingFile) {
-      setDataConfig(JSON.parse(globalStateFromExtension.scaffoldingFile));
-      handleModalValue(true);
+      try {
+        setDataConfig(JSON.parse(globalStateFromExtension.scaffoldingFile));
+        handleModalValue(true);
+      } catch (error: any) {
+        vscode.postMessage<ErrorMessage>({
+          type: 'ERROR',
+          payload: (error?.message || error) as string
+        });
+      }
     }
   }, [globalStateFromExtension.scaffoldingFile]);
 
