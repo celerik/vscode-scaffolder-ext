@@ -13,8 +13,9 @@ export interface IFolder {
 
 export interface Data {
   data: Array<IFolder>;
-  folder: string;
+  expressions: Record<string, { case: string; variable: string }>;
   fields: Record<string, string>;
+  folder: string;
   isLocal: boolean;
   isRelative: boolean;
 }
