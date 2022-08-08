@@ -6,6 +6,8 @@ export default {
     display: 'grid'
   },
   textContainer: {
+    color: 'white',
+    fontWeight: 'bold',
     margin: '10px 0px'
   },
   divider: {

@@ -25,3 +25,9 @@ export interface IResultInfo {
   content: any;
   path: string;
 }
+
+export interface IDataConfig {
+  variables: string[];
+  isRelative?: boolean;
+  expressions?: Record<string, { case: string; variable: string }>;
+}

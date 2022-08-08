@@ -14,7 +14,7 @@ export default {
     color: 'white'
   },
   noResourceLabel: {
-    ml: 2,
+    ml: 4,
     fontWeight: 'bold'
   }
 };

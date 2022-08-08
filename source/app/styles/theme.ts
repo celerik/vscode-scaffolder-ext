@@ -83,7 +83,7 @@ const theme = createTheme({
           padding: '10px 20px',
           height: 'min-content',
           color: colors.white,
-          backgroundColor: colors.outerSpace,
+          backgroundColor: 'rgb(9, 113, 241)',
           textTransform: 'capitalize',
           fontWeight: '500'
         },
