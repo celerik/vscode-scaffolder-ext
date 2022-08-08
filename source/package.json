@@ -25,7 +25,7 @@
       "status-bar-icon": {
         "description": "Status Bar icon",
         "default": {
-          "fontPath": "./font.woff",
+          "fontPath": "./utils/status-bar-icon.woff",
           "fontCharacter": "\\41"
         }
       }
