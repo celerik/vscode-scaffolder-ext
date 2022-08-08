@@ -21,6 +21,15 @@
   ],
   "main": "./out/src/extension.js",
   "contributes": {
+    "icons": {
+      "status-bar-icon": {
+        "description": "Status Bar icon",
+        "default": {
+          "fontPath": "./font.woff",
+          "fontCharacter": "\\41"
+        }
+      }
+    },
     "menus": {
       "explorer/context": [
         {
