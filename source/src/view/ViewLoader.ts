@@ -5,8 +5,16 @@ import * as fs from 'fs';
 
 // scripts
 import {
-  Message, CommonMessage, StateMessage, FilesMessage
+  Message, CommonMessage, StateMessage, FilesMessage, RedirectMessage
 } from './messages/messageTypes';
+import {
+  ensureDirectoryExistence,
+  onRenderContent,
+  walk
+} from '../../utils/filesManagement';
+
+// vars
+let currentPath: string;
 
 export class ViewLoader {
   public static currentPanel?: vscode.WebviewPanel;
@@ -17,8 +25,11 @@ export class ViewLoader {
 
   private disposables: vscode.Disposable[];
 
-  constructor(context: vscode.ExtensionContext) {
+  private fileUri: vscode.Uri;
+
+  constructor(context: vscode.ExtensionContext, fileUri: vscode.Uri) {
     this.context = context;
+    this.fileUri = fileUri;
     this.disposables = [];
 
     this.panel = vscode.window.createWebviewPanel(
@@ -48,9 +59,11 @@ export class ViewLoader {
     this.panel.webview.onDidReceiveMessage(
       (message: Message) => {
         switch (message.type) {
-          case 'RELOAD':
-            vscode.commands.executeCommand('workbench.action.webview.reloadWebviewAction');
+          case 'REDIRECT': {
+            const url = (message as RedirectMessage).payload;
+            vscode.env.openExternal(vscode.Uri.parse(url));
             break;
+          }
           case 'STATE': {
             const text = (message as StateMessage).payload;
             context.globalState.update(templateUrl, JSON.stringify(text));
@@ -68,16 +81,21 @@ export class ViewLoader {
           }
           case 'SCAFFOLDING': {
             const data = (message as FilesMessage).payload;
+            if (!vscode.workspace.workspaceFolders) throw new Error();
+            currentPath = data.isRelative
+              ? fileUri.fsPath : vscode.workspace.workspaceFolders[0].uri.fsPath;
             if (data.isLocal) {
               this.onCreateDir(data, data.fields);
             } else {
               data.data.forEach((el) => {
                 const [, pathFolder] = el.path.split(data.folder);
-                if (!vscode.workspace.workspaceFolders) throw new Error();
-                const newPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}${this.onRenderContent(pathFolder, data.fields)}`;
+                const newPath = `${currentPath}${onRenderContent(pathFolder, data.fields, data.expressions)}`;
                 const fileExists = this.thereIsAFile(newPath);
                 if (!fileExists) {
-                  fs.writeFileSync(newPath, this.onRenderContent(el.content, data.fields));
+                  fs.writeFileSync(
+                    newPath,
+                    onRenderContent(el.content, data.fields, data.expressions)
+                  );
                 }
               });
               vscode.window.showInformationMessage('Scaffolding completed successfully.');
@@ -106,70 +124,34 @@ export class ViewLoader {
     );
   }
 
-  walk(dir: string) {
-    let results: string[] = [];
-    const list = fs.readdirSync(dir);
-    list.forEach((file) => {
-      const newFile = `${dir}\\${file}`;
-      const stat = fs.statSync(newFile);
-      if (stat && stat.isDirectory()) {
-        /* Recurse into a subdirectory */
-        results = results.concat(this.walk(newFile));
-      } else {
-        /* Is a file */
-        results.push(newFile);
-      }
-    });
-    return results;
-  }
-
-  ensureDirectoryExistence(filePath: string) {
-    const dirname = path.dirname(filePath);
-    if (fs.existsSync(dirname)) {
-      return true;
-    }
-    this.ensureDirectoryExistence(dirname);
-    fs.mkdirSync(dirname);
-    return false;
-  }
-
   thereIsAFile(newPath: string) {
     if (fs.existsSync(newPath)) {
       vscode.window.showErrorMessage(`Currently there is a file with the path ${newPath}; that is why this file was not created.`);
       return true;
     }
-    this.ensureDirectoryExistence(newPath);
+    ensureDirectoryExistence(newPath);
     return false;
-  }
-
-  onRenderContent(data: string, values: Record<string, string>) {
-    let stringContent = data;
-    Object.keys(values).forEach((key) => {
-      stringContent = stringContent.replaceAll(key, values[key]);
-    });
-    return stringContent;
   }
 
   onCreateDir(data: any, values: Record<string, string>) {
     try {
       if (!vscode.workspace.workspaceFolders) throw new Error();
       const localPath = `${vscode.workspace.workspaceFolders[0].uri.fsPath}\\Scaffolding\\${data.folder}`;
-      const contentPaths = this.walk(localPath).map((innerPath: string) => {
-        const [route, endRoute] = innerPath.split(`\\Scaffolding\\${data.folder}`);
+      const contentPaths = walk(localPath).map((innerPath: string) => {
+        const [, endRoute] = innerPath.split(`\\Scaffolding\\${data.folder}`);
         return {
-          path: `${route}${endRoute}`,
+          path: `${currentPath}${endRoute}`,
           relativePath: innerPath
         };
       });
       contentPaths
         .filter((element) => element.relativePath !== `${localPath}\\config.json`)
         .forEach((el) => {
-          const newPath = this.onRenderContent(el.path, values);
+          const newPath = onRenderContent(el.path, values, data.expressions);
           const fileExists = this.thereIsAFile(newPath);
           if (!fileExists) {
             const contentFile = fs.readFileSync(el.relativePath, 'utf8');
-            this.onRenderContent(contentFile, values);
-            fs.writeFileSync(newPath, this.onRenderContent(contentFile, values));
+            fs.writeFileSync(newPath, onRenderContent(contentFile, values, data.expressions));
           }
         });
       vscode.window.showInformationMessage('Scaffolding completed successfully.');
@@ -198,7 +180,7 @@ export class ViewLoader {
     this.panel.webview.html = html;
   }
 
-  static showWebview(context: vscode.ExtensionContext) {
+  static showWebview(context: vscode.ExtensionContext, fileUri: vscode.Uri) {
     const Cls = this;
     const column = vscode.window.activeTextEditor
       ? vscode.window.activeTextEditor.viewColumn
@@ -206,7 +188,7 @@ export class ViewLoader {
     if (Cls.currentPanel) {
       Cls.currentPanel.reveal(column);
     } else {
-      Cls.currentPanel = new Cls(context).panel;
+      Cls.currentPanel = new Cls(context, fileUri).panel;
     }
   }
 
@@ -256,6 +238,7 @@ export class ViewLoader {
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
           <title>Celerik Scaffolder</title>
         </head>
 

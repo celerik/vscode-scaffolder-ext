@@ -4,8 +4,8 @@ import { ViewLoader } from './view/ViewLoader';
 let myStatusBarItem: vscode.StatusBarItem;
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
-    vscode.commands.registerCommand('celerik-scaffolder.open', () => {
-      ViewLoader.showWebview(context);
+    vscode.commands.registerCommand('celerik-scaffolder.open', (fileUri) => {
+      ViewLoader.showWebview(context, fileUri);
     })
   );
   myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);

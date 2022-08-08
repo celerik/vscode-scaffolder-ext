@@ -7,24 +7,31 @@ import React, { useState, useContext, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 
 // Scripts
-import ListItem from '../../molecules/row-item-template';
 import ModalSelect from '../../molecules/modal-select';
+import RowItemTemplate from '../../molecules/row-item-template';
 import styles from './styles';
 import { GlobalStateContext } from '../../../context/MessageContext';
-import { IFolder } from '../../../utils/interfaces/remoteFolders.interface';
+import { IFolder, IDataConfig } from '../../../utils/interfaces/remoteFolders.interface';
 import { localList } from '../../../api/local-list';
 import { remoteList } from '../../../api/remote-list';
+import { ErrorMessage } from '../../../../src/view/messages/messageTypes';
 
 interface Props {
   data: IFolder[];
   isLocal?: boolean;
+  owner?: string;
   title: string;
 }
 
-const TemplateList = ({ title, data, isLocal }: Props) => {
+const TemplateList = ({
+  data,
+  isLocal,
+  owner,
+  title
+}: Props) => {
   const { globalStateFromExtension } = useContext(GlobalStateContext);
 
-  const [dataConfig, setDataConfig] = useState<Array<string>>([]);
+  const [dataConfig, setDataConfig] = useState<IDataConfig>({ variables: [] });
   const [folderSelected, setFolderSelected] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -32,12 +39,12 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
 
   const getFileConfigSelected = async (folderName: string) => {
     setFolderSelected(folderName);
-    let configFile: string[] = [];
+    let configFile: IDataConfig = { variables: [] };
     if (isLocal) {
       localList.getConfigFile(folderName);
     } else {
       configFile = await remoteList.getConfigFile(globalStateFromExtension.templateUrl, folderName);
-      if (configFile.length) {
+      if (configFile.variables.length) {
         setDataConfig(configFile);
         handleModalValue(true);
       }
@@ -50,22 +57,34 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
     vscode.postMessage({
       type: 'SCAFFOLDING',
       payload: {
-        folder: folderSelected, fields, isLocal, data: remoteFiles
+        folder: folderSelected,
+        fields,
+        isLocal,
+        data: remoteFiles,
+        isRelative: dataConfig.isRelative,
+        expressions: dataConfig.expressions || {}
       }
     });
   };
 
   useEffect(() => {
     if (isLocal && globalStateFromExtension.scaffoldingFile) {
-      setDataConfig(JSON.parse(globalStateFromExtension.scaffoldingFile).variables);
-      handleModalValue(true);
+      try {
+        setDataConfig(JSON.parse(globalStateFromExtension.scaffoldingFile));
+        handleModalValue(true);
+      } catch (error: any) {
+        vscode.postMessage<ErrorMessage>({
+          type: 'ERROR',
+          payload: (error?.message || error) as string
+        });
+      }
     }
   }, [globalStateFromExtension.scaffoldingFile]);
 
   return (
     <>
       <ModalSelect
-        data={dataConfig}
+        data={dataConfig.variables}
         handleDialogValue={handleModalValue}
         handleSubmitData={handleSubmitData}
         title={folderSelected}
@@ -78,20 +97,25 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
           </Typography>
         </Paper>
         <List sx={styles.list}>
-          {data.length ? data.map((folder) => (
-            <ListItem
-              key={(folder.name || folder) as React.Key}
-              link={folder.html_url}
-              nameFolder={(folder.name || folder) as string}
-              functionSelect={
+          <Grid container spacing={2}>
+            {data.length ? data.map((folder) => (
+              <Grid key={(folder.name || folder) as React.Key} md={6} xs={12} item>
+                <RowItemTemplate
+                  key={(folder.name || folder) as React.Key}
+                  link={folder.html_url}
+                  owner={!isLocal ? owner : ''}
+                  nameFolder={(folder.name || folder) as string}
+                  functionSelect={
                 () => getFileConfigSelected(folder.name)
-              }
-            />
-          )) : (
-            <Typography variant="h5" sx={styles.noResourceLabel}>
-              No resources found
-            </Typography>
-          )}
+            }
+                />
+              </Grid>
+            )) : (
+              <Typography variant="body1" sx={styles.noResourceLabel}>
+                No resources found
+              </Typography>
+            )}
+          </Grid>
         </List>
       </Grid>
     </>
@@ -99,7 +123,8 @@ const TemplateList = ({ title, data, isLocal }: Props) => {
 };
 
 TemplateList.defaultProps = {
-  isLocal: false
+  isLocal: false,
+  owner: ''
 };
 
 export default TemplateList;

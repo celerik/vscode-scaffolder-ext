@@ -1,4 +1,4 @@
-export type MessageType = 'RELOAD' | 'COMMON' | 'ERROR' | 'STATE' | 'SCAFFOLDING' | 'SCAFFOLDING-GET-FILE';
+export type MessageType = 'REDIRECT' | 'COMMON' | 'ERROR' | 'STATE' | 'SCAFFOLDING' | 'SCAFFOLDING-GET-FILE';
 
 export interface Message {
   type: MessageType;
@@ -13,9 +13,11 @@ export interface IFolder {
 
 export interface Data {
   data: Array<IFolder>;
-  folder: string;
+  expressions: Record<string, { case: string; variable: string }>;
   fields: Record<string, string>;
+  folder: string;
   isLocal: boolean;
+  isRelative: boolean;
 }
 
 export interface CommonMessage extends Message {
@@ -33,8 +35,9 @@ export interface StateMessage extends Message {
   payload: Object;
 }
 
-export interface ReloadMessage extends Message {
-  type: 'RELOAD';
+export interface RedirectMessage extends Message {
+  type: 'REDIRECT';
+  payload: string;
 }
 
 export interface ErrorMessage extends Message {
