@@ -55,9 +55,7 @@ const RowItemTemplate = ({
           sx={styles.subContainer}
           xs={1}
         >
-          {!!link && (
-            <Tooltip title="Open in Github" arrow><GitHubIcon onClick={onClickGithub} /></Tooltip>
-          )}
+          {!!link && (<Tooltip title="Open in Github" arrow><GitHubIcon onClick={onClickGithub} /></Tooltip>)}
         </Grid>
       </Grid>
     </ListItem>
