@@ -81,5 +81,6 @@ const walk = (dir: string) => {
 export {
   ensureDirectoryExistence,
   onRenderContent,
-  walk
+  walk,
+  CASES
 };
