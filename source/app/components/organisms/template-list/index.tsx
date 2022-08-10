@@ -106,8 +106,8 @@ const TemplateList = ({
                   owner={!isLocal ? owner : ''}
                   nameFolder={(folder.name || folder) as string}
                   functionSelect={
-                () => getFileConfigSelected(folder.name)
-            }
+                    () => getFileConfigSelected(folder.name)
+                  }
                 />
               </Grid>
             )) : (
