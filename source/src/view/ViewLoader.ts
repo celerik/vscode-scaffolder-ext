@@ -145,7 +145,8 @@ export class ViewLoader {
         };
       });
       contentPaths
-        .filter((element) => element.relativePath !== `${localPath}\\config.json`)
+        .filter((element) => element.relativePath !== `${localPath}\\config.json`
+          && element.relativePath !== `${localPath}\\Config.json`)
         .forEach((el) => {
           const newPath = onRenderContent(el.path, values, data.expressions);
           const fileExists = this.thereIsAFile(newPath);

@@ -2,12 +2,13 @@ export default {
   mainContainer: {
     cursor: 'pointer',
     mt: '3px',
-    '&:hover': { backgroundColor: 'background.hover' }
+    '&:hover': { backgroundColor: 'background.hover' },
+    borderBottom: '1px solid',
+    borderColor: 'background.paper'
   },
   textFolder: {
     color: 'text.third',
-    paddingLeft: '16px',
-    textTransform: 'capitalize'
+    paddingLeft: '16px'
   },
   buttonSelect: {
     mt: '3px'
@@ -15,8 +16,7 @@ export default {
   icon: {
     alignItems: 'center',
     display: 'flex',
-    marginLeft: 10,
-    marginRight: -5
+    marginLeft: 10
   },
   subContainer: {
     display: 'flex'

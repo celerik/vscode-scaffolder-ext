@@ -46,7 +46,8 @@ const onRenderContent = (
     stringContent = stringContent.replaceAll(key, values[key]);
   });
   Object.keys(expressions).forEach((expression) => {
-    if (Object.keys(CASES).indexOf(expressions[expression].case) > -1) {
+    if (Object.keys(CASES).indexOf(expressions[expression].case) > -1
+      && expressions[expression].case && expressions[expression].variable) {
       stringContent = stringContent
         .replaceAll(
           expression,
@@ -55,7 +56,7 @@ const onRenderContent = (
           ](values[expressions[expression].variable])
         );
     } else {
-      vscode.window.showErrorMessage(`Invalid case: ${expressions[expression].case}`);
+      vscode.window.showErrorMessage(`Invalid formatting in the expression: ${expression}`);
     }
   });
   return stringContent;
@@ -81,5 +82,6 @@ const walk = (dir: string) => {
 export {
   ensureDirectoryExistence,
   onRenderContent,
-  walk
+  walk,
+  CASES
 };

@@ -12,16 +12,19 @@ const colors = {
   lavanderGrey: '#BEC2D1',
   philippineSilver: '#B3B3B3',
   policeBlue: '#394A61',
+  white: '#FFFFFF',
+  chineseBlack: '#151515',
   raisinBlack: '#242424',
-  white: '#FFFFFF'
+  sonicSilver: '#757575',
+  outerSpace: '#444444'
 };
 
 const theme = createTheme({
   palette: {
     background: {
-      default: colors.gunmetal,
+      default: colors.chineseBlack,
       hover: colors.raisinBlack,
-      paper: colors.policeBlue
+      paper: colors.raisinBlack
     },
     grey: {
       500: colors.philippineSilver
@@ -30,7 +33,7 @@ const theme = createTheme({
       main: colors.white
     },
     secondary: {
-      main: colors.japaneseIndigo
+      main: colors.sonicSilver
     },
     text: {
       primary: colors.cornflowerBlue,
@@ -69,7 +72,7 @@ const theme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         root: {
-          backgroundColor: colors.charcoal,
+          backgroundColor: colors.chineseBlack,
           color: 'white'
         }
       }
@@ -79,13 +82,20 @@ const theme = createTheme({
         contained: {
           padding: '10px 20px',
           height: 'min-content',
-          color: colors.cornflowerBlue,
-          bgColor: 'white',
+          color: colors.white,
+          backgroundColor: 'rgb(9, 113, 241)',
           textTransform: 'capitalize',
           fontWeight: '500'
         },
         text: {
           color: colors.hanBlue
+        }
+      }
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          color: colors.white
         }
       }
     }
