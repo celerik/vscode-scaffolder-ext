@@ -8,7 +8,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 // @scripts
-import { formatCapitalLetters } from '../../../utils/utils';
+import { toCapitalLetters } from '../../../../utils/utils';
 import DevIcon from '../../atoms/dev-icon';
 
 // @styles
@@ -44,7 +44,7 @@ const RowItemTemplate = ({
           <DevIcon customStyle={styles.icon} iconName={nameFolder.split('-')[0]} />
         </Grid>
         <Grid xs={10} item container direction="column">
-          <Typography variant="body1" sx={styles.textFolder}>{formatCapitalLetters(nameFolder)}</Typography>
+          <Typography variant="body1" sx={styles.textFolder}>{toCapitalLetters(nameFolder)}</Typography>
           {!!owner && (<Typography variant="body2" sx={styles.textFolder}>{`By ${owner}`}</Typography>)}
         </Grid>
         <Grid
@@ -55,13 +55,7 @@ const RowItemTemplate = ({
           sx={styles.subContainer}
           xs={1}
         >
-          {link && (
-          <Tooltip title="Open in Github" arrow>
-            <GitHubIcon
-              onClick={onClickGithub}
-            />
-          </Tooltip>
-          )}
+          {!!link && (<Tooltip title="Open in Github" arrow><GitHubIcon onClick={onClickGithub} /></Tooltip>)}
         </Grid>
       </Grid>
     </ListItem>

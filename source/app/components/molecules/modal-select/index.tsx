@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import { useForm } from 'react-hook-form';
 
 // @scripts
-import { formatCapitalLetters } from '../../../utils/utils';
+import { toCapitalLetters } from '../../../../utils/utils';
 import { GlobalStateContext } from '../../../context/MessageContext';
 
 // @styles
@@ -56,7 +56,7 @@ const ModalSelect = ({
     <Dialog open={value} disableEscapeKeyDown fullWidth sx={{ borderRadius: 0, ...styles.dialog }} maxWidth="sm">
       <DialogTitle sx={styles.titleContainer} component="div">
         <Typography gutterBottom variant="h4" sx={styles.title}>
-          {formatCapitalLetters(title)}
+          {toCapitalLetters(title)}
         </Typography>
         <IconButton aria-label="close" onClick={handleCloseDialog} sx={styles.iconButton}>
           <CloseIcon />
