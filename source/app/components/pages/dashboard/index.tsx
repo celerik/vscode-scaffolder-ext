@@ -1,4 +1,3 @@
-/* global localTemplates */
 // packages
 import React, { useEffect, useContext, useState } from 'react';
 import Grid from '@mui/material/Grid';
@@ -15,10 +14,9 @@ import { IFolder } from '../../../utils/interfaces/remoteFolders.interface';
 import { remoteList } from '../../../api/remote-list';
 
 const Dashboard = () => {
-  const [localData, setLocalData] = useState<IFolder[]>([]);
   const [owner, setOwner] = useState<string>('');
   const [remoteData, setRemoteData] = useState<IFolder[]>([]);
-  const { globalStateFromExtension } = useContext(GlobalStateContext);
+  const { globalStateFromExtension, localTemplateList } = useContext(GlobalStateContext);
 
   const getRemoteFolders = async () => {
     if (globalStateFromExtension.templateUrl) {
@@ -35,13 +33,6 @@ const Dashboard = () => {
     getRemoteFolders();
   }, [globalStateFromExtension.templateUrl]);
 
-  useEffect(() => {
-    if (localTemplates) {
-      const data = localTemplates.split(',').map((template) => ({ name: template }));
-      setLocalData(data);
-    }
-  }, []);
-
   return (
     <Grid direction="column" alignContent="baseline" container sx={styles.gridContainer}>
       <Grid direction="row" justifyContent="space-between" alignItems="center" container item>
@@ -53,7 +44,7 @@ const Dashboard = () => {
       </Grid>
       <Grid sx={styles.list} item>
         <TemplateList data={remoteData} owner={owner} title="Remote Templates" />
-        <TemplateList isLocal data={localData} title="Local Templates" />
+        <TemplateList isLocal data={localTemplateList} title="Local Templates" />
       </Grid>
     </Grid>
   );
