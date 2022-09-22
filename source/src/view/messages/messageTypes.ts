@@ -1,4 +1,4 @@
-export type MessageType = 'REDIRECT' | 'COMMON' | 'ERROR' | 'STATE' | 'SCAFFOLDING' | 'SCAFFOLDING-GET-FILE';
+export type MessageType = 'REDIRECT' | 'COMMON' | 'ERROR' | 'STATE' | 'SCAFFOLDING' | 'SCAFFOLDING-GET-FILE' | 'ON-UPDATE-FILES';
 
 export interface Message {
   type: MessageType;
