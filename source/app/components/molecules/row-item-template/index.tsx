@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import ListItem from '@mui/material/ListItem';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import { lowerCase } from 'lodash';
 
 // @scripts
 import { toCapitalLetters } from '../../../../utils/utils';
@@ -37,11 +38,16 @@ const RowItemTemplate = ({
     }
   };
 
+  const onGetIcon = (fileName: string) => {
+    const name = lowerCase(fileName);
+    return name.split(' ')[0] || 'default';
+  };
+
   return (
     <ListItem divider onClick={functionSelect} sx={styles.mainContainer}>
       <Grid container>
         <Grid item sx={styles.subContainer}>
-          <DevIcon customStyle={styles.icon} iconName={nameFolder.split('-')[0]} />
+          <DevIcon customStyle={styles.icon} iconName={onGetIcon(nameFolder)} />
         </Grid>
         <Grid xs={10} item container direction="column">
           <Typography variant="body1" sx={styles.textFolder}>{toCapitalLetters(nameFolder)}</Typography>

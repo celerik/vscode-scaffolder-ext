@@ -1,4 +1,4 @@
-/* global vscode, prevState, window */
+/* global vscode, prevState, window, localTemplates */
 // packages
 import React, {
   useEffect, useMemo, useState, useCallback
@@ -10,10 +10,14 @@ import { routes } from './routes/config';
 
 // scripts
 import { GlobalStateContext } from './context/MessageContext';
-import { CommonMessage, Message, StateMessage } from '../src/view/messages/messageTypes';
+import {
+  CommonMessage, Message, StateMessage
+} from '../src/view/messages/messageTypes';
+import { IFolder } from './utils/interfaces/remoteFolders.interface';
 
 export const App = () => {
   const [globalStateFromExtension, setGlobalStateFromExtension] = useState<Record<string, any>>({});
+  const [localTemplateList, setLocalTemplateList] = useState<IFolder[]>([]);
 
   const handleStateFromExtension = useCallback(
     (event: MessageEvent<Message>) => {
@@ -29,6 +33,14 @@ export const App = () => {
             ...globalStateFromExtension,
             scaffoldingFile: message.payload
           });
+          break;
+        }
+        case 'ON-UPDATE-FILES': {
+          const message = event.data;
+          setLocalTemplateList(message.payload.map((item: string) => ({
+            name: item
+          })));
+
           break;
         }
         default:
@@ -57,6 +69,10 @@ export const App = () => {
       const mapped = `${prevState.replace(/'/g, '"')}`;
       setGlobalStateFromExtension(JSON.parse(mapped));
     }
+    if (localTemplates.length) {
+      const data: IFolder[] = localTemplates.split(',').map((template) => ({ name: template }));
+      setLocalTemplateList(data);
+    }
   }, []);
 
   useEffect(() => {
@@ -70,8 +86,12 @@ export const App = () => {
   }, [handleStateFromExtension]);
 
   const data = useMemo(
-    () => ({ globalStateFromExtension, handleStateFromApp }),
-    [globalStateFromExtension]
+    () => ({
+      globalStateFromExtension,
+      handleStateFromApp,
+      localTemplateList
+    }),
+    [globalStateFromExtension, localTemplateList]
   );
 
   return (
