@@ -10,9 +10,9 @@ export function activate(context: vscode.ExtensionContext) {
   );
   myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
   myStatusBarItem.command = 'celerik-scaffolder.open';
-  context.subscriptions.push(myStatusBarItem);
   myStatusBarItem.text = '$(status-bar-icon)';
   myStatusBarItem.tooltip = 'Click to open Celerik Scaffolder';
+  context.subscriptions.push(myStatusBarItem);
   myStatusBarItem.show();
 }
 
