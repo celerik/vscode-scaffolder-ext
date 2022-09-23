@@ -45,7 +45,7 @@ const RowItemTemplate = ({
 
   return (
     <ListItem divider onClick={functionSelect} sx={styles.mainContainer}>
-      <Grid container>
+      <Grid container wrap="nowrap">
         <Grid item sx={styles.subContainer}>
           <DevIcon customStyle={styles.icon} iconName={onGetIcon(nameFolder)} />
         </Grid>
