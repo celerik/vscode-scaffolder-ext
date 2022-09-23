@@ -7,6 +7,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 
 // Scripts
+import { Button } from '@mui/material';
 import ModalSelect from '../../molecules/modal-select';
 import RowItemTemplate from '../../molecules/row-item-template';
 import styles from './styles';
@@ -34,6 +35,7 @@ const TemplateList = ({
   const [dataConfig, setDataConfig] = useState<IDataConfig>({ variables: [] });
   const [folderSelected, setFolderSelected] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [showMore, setShowMore] = useState({ show: false, buttonText: 'Show more' });
 
   const handleModalValue = (state: boolean) => setIsModalOpen(state);
 
@@ -67,6 +69,21 @@ const TemplateList = ({
     });
   };
 
+  const changeShowMore = () => {
+    if (showMore.show) {
+      setShowMore({ show: false, buttonText: 'Show more' });
+    } else {
+      setShowMore({ show: true, buttonText: 'Show less' });
+    }
+  };
+
+  const getFolders = () => {
+    if (data.length > 4 && !showMore.show) {
+      return data.slice(0, 4);
+    }
+    return data;
+  };
+
   useEffect(() => {
     if (isLocal && globalStateFromExtension.scaffoldingFile) {
       try {
@@ -98,7 +115,7 @@ const TemplateList = ({
         </Paper>
         <List sx={styles.list}>
           <Grid container spacing={2}>
-            {data.length ? data.map((folder) => (
+            {data.length ? getFolders().map((folder) => (
               <Grid key={(folder.name || folder) as React.Key} md={6} xs={12} item>
                 <RowItemTemplate
                   key={(folder.name || folder) as React.Key}
@@ -117,6 +134,11 @@ const TemplateList = ({
             )}
           </Grid>
         </List>
+        { data.length > 4 && (
+        <Button onClick={changeShowMore}>
+          {showMore.buttonText}
+        </Button>
+        )}
       </Grid>
     </>
   );
