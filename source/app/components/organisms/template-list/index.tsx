@@ -2,6 +2,7 @@
 // Package
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
+import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import React, { useState, useContext, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
@@ -34,6 +35,7 @@ const TemplateList = ({
   const [dataConfig, setDataConfig] = useState<IDataConfig>({ variables: [] });
   const [folderSelected, setFolderSelected] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [showMore, setShowMore] = useState({ show: false, buttonText: 'Show more' });
 
   const handleModalValue = (state: boolean) => setIsModalOpen(state);
 
@@ -67,6 +69,21 @@ const TemplateList = ({
     });
   };
 
+  const changeShowMore = () => {
+    if (showMore.show) {
+      setShowMore({ show: false, buttonText: 'Show more' });
+    } else {
+      setShowMore({ show: true, buttonText: 'Show less' });
+    }
+  };
+
+  const getFolders = () => {
+    if (data.length > 4 && !showMore.show) {
+      return data.slice(0, 4);
+    }
+    return data;
+  };
+
   useEffect(() => {
     if (isLocal && globalStateFromExtension.scaffoldingFile) {
       try {
@@ -98,7 +115,7 @@ const TemplateList = ({
         </Paper>
         <List sx={styles.list}>
           <Grid container spacing={2}>
-            {data.length ? data.map((folder) => (
+            {data.length ? getFolders().map((folder) => (
               <Grid key={(folder.name || folder) as React.Key} md={6} xs={12} item>
                 <RowItemTemplate
                   key={(folder.name || folder) as React.Key}
@@ -117,6 +134,24 @@ const TemplateList = ({
             )}
           </Grid>
         </List>
+        { data.length > 4 && (
+        <Grid
+          item
+          container
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+        >
+          <Link
+            component="button"
+            href="/#"
+            underline="hover"
+            onClick={changeShowMore}
+          >
+            { showMore.show ? showMore.buttonText : `${showMore.buttonText} (${data.length < 32 ? data.length - 4 : '+32'})`}
+          </Link>
+        </Grid>
+        )}
       </Grid>
     </>
   );
