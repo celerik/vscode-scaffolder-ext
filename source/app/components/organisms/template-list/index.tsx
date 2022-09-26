@@ -2,12 +2,12 @@
 // Package
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
+import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import React, { useState, useContext, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 
 // Scripts
-import { Button } from '@mui/material';
 import ModalSelect from '../../molecules/modal-select';
 import RowItemTemplate from '../../molecules/row-item-template';
 import styles from './styles';
@@ -135,9 +135,22 @@ const TemplateList = ({
           </Grid>
         </List>
         { data.length > 4 && (
-        <Button onClick={changeShowMore}>
-          {showMore.buttonText}
-        </Button>
+        <Grid
+          item
+          container
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+        >
+          <Link
+            component="button"
+            href="/#"
+            underline="hover"
+            onClick={changeShowMore}
+          >
+            { showMore.show ? showMore.buttonText : `${showMore.buttonText} (${data.length < 32 ? data.length - 4 : '+32'})`}
+          </Link>
+        </Grid>
         )}
       </Grid>
     </>
