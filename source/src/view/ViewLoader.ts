@@ -51,6 +51,14 @@ export class ViewLoader {
       });
       context.globalState.update(templateUrl, data);
     }
+    const folders = vscode.workspace.workspaceFolders;
+    if (folders) {
+      const watcher = vscode.workspace.createFileSystemWatcher(
+        new vscode.RelativePattern(`${folders[0].uri.fsPath}\\Scaffolding`, '*')
+      );
+      watcher.onDidCreate(() => this.onUpdateFiles());
+      watcher.onDidDelete(() => this.onUpdateFiles());
+    }
 
     // render webview
     this.renderWebview();
@@ -131,6 +139,26 @@ export class ViewLoader {
     }
     ensureDirectoryExistence(newPath);
     return false;
+  }
+
+  onUpdateFiles() {
+    console.log('onUpdateFiles');
+    ViewLoader.postMessageToWebview({
+      type: 'ON-UPDATE-FILES',
+      payload: this.onGetLocalFiles()
+    });
+  }
+
+  onGetLocalFiles() {
+    try {
+      if (!vscode.workspace.workspaceFolders) throw new Error();
+      const localTemplates = fs.readdirSync(`${vscode.workspace.workspaceFolders[0].uri.fsPath}\\Scaffolding`, { withFileTypes: true });
+      return localTemplates
+        .filter((dirent: any) => dirent.isDirectory())
+        .map((dirent) => dirent.name);
+    } catch (error) {
+      return [];
+    }
   }
 
   onCreateDir(data: any, values: Record<string, string>) {
@@ -220,18 +248,9 @@ export class ViewLoader {
 
     // The global status of vs code is loaded and passed as a string to the webview.
     let prevState = this.context.globalState.get('global.state') || '';
-    let localTemplates: Record<string, any>[];
     prevState = JSON.stringify(prevState).replace(/\\"/g, '\'');
 
-    try {
-      if (!vscode.workspace.workspaceFolders) throw new Error();
-      localTemplates = fs.readdirSync(`${vscode.workspace.workspaceFolders[0].uri.fsPath}\\Scaffolding`, { withFileTypes: true });
-      localTemplates = localTemplates
-        .filter((dirent: any) => dirent.isDirectory())
-        .map((dirent) => dirent.name);
-    } catch (error) {
-      localTemplates = [];
-    }
+    const localTemplates = this.onGetLocalFiles();
 
     return `
       <!DOCTYPE html>

@@ -16,10 +16,20 @@
     "url": "https://github.com/celerik/vscode-scaffolder-ext.git"
   },
   "activationEvents": [
-    "onCommand:celerik-scaffolder.open"
+    "onCommand:celerik-scaffolder.open",
+    "onStartupFinished"
   ],
   "main": "./out/src/extension.js",
   "contributes": {
+    "icons": {
+      "status-bar-icon": {
+        "description": "Status Bar icon",
+        "default": {
+          "fontPath": "./utils/status-bar-icon.woff",
+          "fontCharacter": "\\41"
+        }
+      }
+    },
     "menus": {
       "explorer/context": [
         {
