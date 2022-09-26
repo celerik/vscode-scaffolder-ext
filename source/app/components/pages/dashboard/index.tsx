@@ -17,41 +17,11 @@ import { GlobalStateContext } from '../../../context/MessageContext';
 import { IFolder } from '../../../utils/interfaces/remoteFolders.interface';
 import { remoteList } from '../../../api/remote-list';
 
-const Search = styled('div')(({ theme }) => ({
-  backgroundColor: 'black',
-  borderRadius: 0,
-  marginLeft: 0,
-  position: 'relative',
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1)
-  }
-}));
+const Search = styled('div')(({ theme }) => styles.search(theme));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  alignItems: 'center',
-  display: 'flex',
-  height: '100%',
-  justifyContent: 'center',
-  padding: theme.spacing(0, 2),
-  pointerEvents: 'none',
-  position: 'absolute',
-  zIndex: 1
-}));
+const SearchIconWrapper = styled('div')(({ theme }) => styles.searchIconWrapper(theme));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  backgroundColor: theme.palette.grey[700],
-  borderRadius: 4,
-  color: 'white',
-  width: '100%',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`
-  },
-  '& .MuiInputBase-root': {
-    with: '100%'
-  }
-}));
+const StyledInputBase = styled(InputBase)(({ theme }) => styles.styledInputBase(theme));
 
 const Dashboard = () => {
   const [search, setSearch] = useState<string>('');
