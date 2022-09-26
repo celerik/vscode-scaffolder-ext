@@ -52,5 +52,5 @@ export default {
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(1)
     }
-  }),
+  })
 };
