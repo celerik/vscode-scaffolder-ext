@@ -4,6 +4,7 @@ import { createTheme, PaletteOptions } from '@mui/material/styles';
 type IPalette = PaletteOptions;
 
 const colors = {
+  darkCharcoal: '#303134',
   charcoal: '#354459',
   cornflowerBlue: '#708AEF',
   gunmetal: '#263344',
@@ -26,8 +27,12 @@ const theme = createTheme({
       hover: colors.raisinBlack,
       paper: colors.raisinBlack
     },
+    common: {
+      white: colors.white
+    },
     grey: {
-      500: colors.philippineSilver
+      500: colors.philippineSilver,
+      700: colors.darkCharcoal
     },
     primary: {
       main: colors.white
