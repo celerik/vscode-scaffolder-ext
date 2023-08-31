@@ -73,7 +73,19 @@ export class RemoteList {
         const contentFile = await axios.get(result.downloadUrl);
         resultsInfo.push({ path: result.path, content: contentFile.data });
       }
-      return resultsInfo.filter((item) => typeof item.content === 'string');
+      const tempItems = resultsInfo.map((item) => {
+        if (typeof item.content === 'string') {
+          return item;
+        }
+        if (typeof item.content === 'object') {
+          return {
+            ...item,
+            content: JSON.stringify(item.content)
+          };
+        }
+        return null;
+      }).filter(Boolean);
+      return tempItems as Array<IResultInfo>;
     } catch (error: any) {
       vscode.postMessage<ErrorMessage>({
         type: 'ERROR',

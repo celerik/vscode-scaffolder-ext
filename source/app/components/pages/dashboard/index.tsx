@@ -17,9 +17,9 @@ import { GlobalStateContext } from '../../../context/MessageContext';
 import { IFolder } from '../../../utils/interfaces/remoteFolders.interface';
 import { remoteList } from '../../../api/remote-list';
 
-const Search = styled('div')(({ theme }) => styles.search(theme));
+const Search = styled('div')(({ theme }) => styles.search(theme) as any);
 
-const SearchIconWrapper = styled('div')(({ theme }) => styles.searchIconWrapper(theme));
+const SearchIconWrapper = styled('div')(({ theme }) => styles.searchIconWrapper(theme) as any);
 
 const StyledInputBase = styled(InputBase)(({ theme }) => styles.styledInputBase(theme));
 
